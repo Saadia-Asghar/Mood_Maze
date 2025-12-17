@@ -131,29 +131,12 @@ export function AuthButton() {
                                     </div>
                                     <div className="text-cinema-gold/60 text-sm">
                                         <p>{library.length} movies saved</p>
+                                        <p className="text-xs mt-1 flex items-center gap-1">
+                                            <Cloud className="w-3 h-3" />
+                                            Auto-synced to cloud
+                                        </p>
                                     </div>
                                 </div>
-
-                                {/* Sync Button */}
-                                <Button
-                                    variant="secondary"
-                                    size="sm"
-                                    onClick={handleSync}
-                                    disabled={syncing}
-                                    className="w-full mb-2 flex items-center justify-center gap-2"
-                                >
-                                    {syncing ? (
-                                        <>
-                                            <div className="w-4 h-4 border-2 border-cinema-gold border-t-transparent rounded-full animate-spin" />
-                                            Syncing...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Cloud className="w-4 h-4" />
-                                            Sync to Cloud
-                                        </>
-                                    )}
-                                </Button>
 
                                 {/* Sign Out Button */}
                                 <Button

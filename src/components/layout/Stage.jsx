@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Film, Volume2, VolumeX } from 'lucide-react';
 import useStore from '../../store/useStore';
 import { cn } from '../../lib/utils';
-import { AuthButton } from './AuthButton';
 
 /**
  * Main stage wrapper with curtains and grain effect
@@ -244,8 +243,7 @@ export function Stage({ children, className }) {
                 ))}
             </motion.div>
 
-            {/* Auth Button - positioned on left */}
-            <AuthButton />
+
 
             {/* Sound toggle button - positioned to avoid overlap */}
             <motion.button

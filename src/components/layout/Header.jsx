@@ -23,13 +23,18 @@ export function Header() {
         { id: 'library', label: 'My Library', icon: Library, badge: library.length },
     ];
 
+
     const handleSignIn = async () => {
+        console.log('🖱️ Sign In button clicked!');
         try {
-            await signInWithGoogle();
+            console.log('Calling signInWithGoogle...');
+            const user = await signInWithGoogle();
+            console.log('Sign in completed successfully:', user);
         } catch (error) {
-            console.error('Sign in error:', error);
+            console.error('❌ Sign in error in Header:', error);
         }
     };
+
 
     const handleSignOut = async () => {
         try {
@@ -121,8 +126,8 @@ export function Header() {
                         <motion.button
                             onClick={toggleSound}
                             className={`p-2.5 rounded-lg transition-all border-2 ${soundEnabled
-                                    ? 'text-cinema-gold bg-cinema-gold/10 border-cinema-gold/50'
-                                    : 'text-cinema-gold/50 border-transparent hover:border-cinema-gold/30'
+                                ? 'text-cinema-gold bg-cinema-gold/10 border-cinema-gold/50'
+                                : 'text-cinema-gold/50 border-transparent hover:border-cinema-gold/30'
                                 }`}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}

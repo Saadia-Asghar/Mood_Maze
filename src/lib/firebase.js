@@ -42,14 +42,32 @@ export const isFirebaseConfigured = () => {
  */
 export const signInWithGoogle = async () => {
     try {
+        console.log('🔐 Starting Google Sign-In...');
+        console.log('Firebase Config:', {
+            apiKey: firebaseConfig.apiKey ? '✅ Set' : '❌ Missing',
+            authDomain: firebaseConfig.authDomain ? '✅ Set' : '❌ Missing',
+            projectId: firebaseConfig.projectId ? '✅ Set' : '❌ Missing',
+        });
+
+        if (!isFirebaseConfigured()) {
+            const errorMsg = '❌ Firebase is not configured! Check your .env file.';
+            console.error(errorMsg);
+            alert('Firebase is not configured. Please check the console for details.');
+            throw new Error(errorMsg);
+        }
+
+        console.log('📱 Opening Google Sign-In popup...');
         const result = await signInWithPopup(auth, googleProvider);
         const user = result.user;
+
+        console.log('✅ Sign-in successful!', user.email);
 
         // Create or update user document in Firestore
         const userRef = doc(db, 'users', user.uid);
         const userDoc = await getDoc(userRef);
 
         if (!userDoc.exists()) {
+            console.log('📝 Creating new user document...');
             // New user - create document
             await setDoc(userRef, {
                 uid: user.uid,
@@ -61,16 +79,35 @@ export const signInWithGoogle = async () => {
                 createdAt: new Date().toISOString(),
                 lastLogin: new Date().toISOString(),
             });
+            console.log('✅ User document created!');
         } else {
+            console.log('📝 Updating existing user...');
             // Existing user - update last login
             await updateDoc(userRef, {
                 lastLogin: new Date().toISOString(),
             });
+            console.log('✅ User updated!');
         }
 
         return user;
     } catch (error) {
-        console.error('Error signing in with Google:', error);
+        console.error('❌ Sign-in error:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+
+        // User-friendly error messages
+        if (error.code === 'auth/popup-closed-by-user') {
+            alert('Sign-in cancelled. Please try again.');
+        } else if (error.code === 'auth/popup-blocked') {
+            alert('Popup was blocked! Please allow popups for this site and try again.');
+        } else if (error.code === 'auth/unauthorized-domain') {
+            alert('This domain is not authorized. Please add it to Firebase Console → Authentication → Settings → Authorized domains');
+        } else if (error.message.includes('not configured')) {
+            alert('Firebase is not configured. Please check your environment variables.');
+        } else {
+            alert(`Sign-in failed: ${error.message}`);
+        }
+
         throw error;
     }
 };
