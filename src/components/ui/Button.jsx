@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
+import { useSound } from '../../hooks/useSound';
 
 /**
  * Cinematic themed button component
@@ -14,6 +15,8 @@ export function Button({
     onClick,
     ...props
 }) {
+    const { playSound } = useSound();
+
     const baseStyles = 'font-semibold rounded-lg border-2 border-cinema-gold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden';
 
     const variants = {
@@ -40,6 +43,8 @@ export function Button({
             disabled={disabled}
             onClick={(e) => {
                 if (!disabled && onClick) {
+                    playSound('click');
+
                     // Add ripple effect
                     const button = e.currentTarget;
                     const ripple = document.createElement('span');
@@ -47,7 +52,7 @@ export function Button({
                     const size = Math.max(rect.width, rect.height);
                     const x = e.clientX - rect.left - size / 2;
                     const y = e.clientY - rect.top - size / 2;
-                    
+
                     ripple.style.cssText = `
                         position: absolute;
                         width: ${size}px;
@@ -60,10 +65,10 @@ export function Button({
                         transform: scale(0);
                         animation: ripple 0.6s ease-out;
                     `;
-                    
+
                     button.appendChild(ripple);
                     setTimeout(() => ripple.remove(), 600);
-                    
+
                     onClick(e);
                 }
             }}

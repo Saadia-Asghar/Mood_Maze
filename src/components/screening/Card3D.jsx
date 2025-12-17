@@ -7,12 +7,15 @@ import { Badge } from '../ui/Badge';
 import { cn } from '../../lib/utils';
 import confetti from 'canvas-confetti';
 
+import { useSound } from '../../hooks/useSound';
+
 /**
  * 3D Flippable Movie Card
  * Shows poster on front, details on back
  */
 export function Card3D({ movie, onTick, onCross }) {
     const [isFlipped, setIsFlipped] = useState(false);
+    const { playSound } = useSound();
 
     // Reset flip state when movie changes
     useEffect(() => {
@@ -21,6 +24,7 @@ export function Card3D({ movie, onTick, onCross }) {
 
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
+        playSound('flip');
         // Add haptic feedback
         if (navigator.vibrate) {
             navigator.vibrate(30);
@@ -28,6 +32,7 @@ export function Card3D({ movie, onTick, onCross }) {
     };
 
     const handleTick = () => {
+        playSound('success');
         // Trigger confetti
         confetti({
             particleCount: 100,
@@ -39,6 +44,7 @@ export function Card3D({ movie, onTick, onCross }) {
     };
 
     const handleCross = () => {
+        playSound('reject');
         onCross(movie);
     };
 

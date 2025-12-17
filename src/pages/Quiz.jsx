@@ -120,7 +120,7 @@ export function Quiz() {
         <div className="min-h-screen flex items-center justify-center px-4 pt-24 pb-12">
             <div className="w-full max-w-4xl">
                 {/* Progress bar */}
-                <ProgressBar current={currentQuestion + 1} total={questions.length} />
+                <ProgressBar current={currentQuestion} total={questions.length} />
 
                 {/* Question card */}
                 <AnimatePresence mode="wait">
