@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodMaze - Sound Files Download Helper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #d4af37;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid #d4af37;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+        }
+        .subtitle {
+            text-align: center;
+            color: #d4af37;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+        .sound-item {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .sound-item:hover {
+            background: rgba(212, 175, 55, 0.2);
+            transform: translateX(5px);
+        }
+        .sound-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #d4af37;
+        }
+        .sound-desc {
+            color: #ccc;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        .links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #8a0303;
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .btn:hover {
+            background: #d4af37;
+            color: #0a0a0a;
+            transform: scale(1.05);
+        }
+        .btn-primary {
+            background: #d4af37;
+            color: #0a0a0a;
+        }
+        .btn-primary:hover {
+            background: #f4cf57;
+        }
+        .instructions {
+            background: rgba(212, 175, 55, 0.05);
+            border-left: 4px solid #d4af37;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 4px;
+        }
+        .instructions h2 {
+            margin-bottom: 15px;
+            color: #d4af37;
+        }
+        .instructions ol {
+            margin-left: 20px;
+            color: #ccc;
+            line-height: 1.8;
+        }
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        .note {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 20px;
+            color: #ccc;
+        }
+        .note strong {
+            color: #d4af37;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 MoodMaze Sound Files</h1>
+        <p class="subtitle">Download helper for required sound effects</p>
+
+        <div class="sound-item">
+            <div class="sound-name">1. click.mp3</div>
+            <div class="sound-desc">Sound for button clicks and general interactions</div>
+            <div class="links">
+                <a href="https://mixkit.co/free-sound-effects/click/" target="_blank" class="btn btn-primary">Mixkit - Click Sounds</a>
+                <a href="https://freesound.org/search/?q=button+click" target="_blank" class="btn">Freesound - Search</a>
+            </div>
+        </div>
+
+        <div class="sound-item">
+            <div class="sound-name">2. success.mp3</div>
+            <div class="sound-desc">Sound when saving a movie to library</div>
+            <div class="links">
+                <a href="https://mixkit.co/free-sound-effects/notification/" target="_blank" class="btn btn-primary">Mixkit - Notification</a>
+                <a href="https://freesound.org/search/?q=success+chime" target="_blank" class="btn">Freesound - Search</a>
+            </div>
+        </div>
+
+        <div class="sound-item">
+            <div class="sound-name">3. flip.mp3</div>
+            <div class="sound-desc">Sound when flipping movie cards</div>
+            <div class="links">
+                <a href="https://mixkit.co/free-sound-effects/page-turn/" target="_blank" class="btn btn-primary">Mixkit - Page Turn</a>
+                <a href="https://freesound.org/search/?q=card+flip" target="_blank" class="btn">Freesound - Search</a>
+            </div>
+        </div>
+
+        <div class="sound-item">
+            <div class="sound-name">4. reel.mp3</div>
+            <div class="sound-desc">Sound when using the camera reel button</div>
+            <div class="links">
+                <a href="https://mixkit.co/free-sound-effects/camera/" target="_blank" class="btn btn-primary">Mixkit - Camera</a>
+                <a href="https://freesound.org/search/?q=camera+shutter" target="_blank" class="btn">Freesound - Search</a>
+            </div>
+        </div>
+
+        <div class="sound-item">
+            <div class="sound-name">5. reject.mp3</div>
+            <div class="sound-desc">Sound when rejecting/skipping a movie</div>
+            <div class="links">
+                <a href="https://mixkit.co/free-sound-effects/whoosh/" target="_blank" class="btn btn-primary">Mixkit - Whoosh</a>
+                <a href="https://freesound.org/search/?q=whoosh+swipe" target="_blank" class="btn">Freesound - Search</a>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h2>📋 Instructions</h2>
+            <ol>
+                <li>Click the <strong>"Mixkit"</strong> buttons above (easiest - no account needed)</li>
+                <li>On Mixkit, click <strong>"Download"</strong> on any sound you like</li>
+                <li>Save the file to: <code>mood-maze/public/sounds/</code></li>
+                <li>Rename it to match the exact filename (e.g., <code>click.mp3</code>)</li>
+                <li>Repeat for all 5 sounds</li>
+                <li>Restart your dev server: <code>npm run dev</code></li>
+                <li>Test in the app - make sure sound toggle (🔊) is enabled!</li>
+            </ol>
+        </div>
+
+        <div class="note">
+            <strong>💡 Tip:</strong> Mixkit is the easiest option - no account needed, just click and download! 
+            After downloading, make sure to rename each file to match the exact names above (click.mp3, success.mp3, etc.)
+        </div>
+    </div>
+</body>
+</html>
+

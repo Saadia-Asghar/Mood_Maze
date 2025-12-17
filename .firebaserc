@@ -1,0 +1,5 @@
+# Firebase cache
+.firebase/
+
+# Firebase config (optional - can be committed)
+# .firebaserc

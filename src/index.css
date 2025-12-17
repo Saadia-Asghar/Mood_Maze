@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    body {
+        @apply bg-cinema-black text-cinema-gold font-sans;
+        background-image: url('/grain.svg');
+        background-repeat: repeat;
+        background-size: 200px 200px;
+        min-height: 100vh;
+    }
+
+    #root {
+        width: 100%;
+        min-height: 100vh;
+    }
+}
+
+@layer components {
+    .cinema-card {
+        @apply bg-cinema-black border-2 border-cinema-gold rounded-lg shadow-2xl;
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+    }
+
+    .cinema-button {
+        @apply px-6 py-3 bg-cinema-red text-cinema-gold font-semibold rounded-lg border-2 border-cinema-gold transition-all duration-300 hover:bg-cinema-gold hover:text-cinema-black hover:scale-105;
+    }
+
+    .cinema-button-secondary {
+        @apply px-6 py-3 bg-transparent text-cinema-gold font-semibold rounded-lg border-2 border-cinema-gold transition-all duration-300 hover:bg-cinema-gold hover:text-cinema-black;
+    }
+
+    .flip-card {
+        perspective: 1000px;
+        transform-style: preserve-3d;
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
+    }
+
+    .flip-card.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+    }
+}
+
+@layer utilities {
+    .text-shadow-gold {
+        text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.3);
+    }
+
+    .grain-overlay {
+        position: relative;
+    }
+
+    .grain-overlay::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('/grain.png');
+        opacity: 0.05;
+        pointer-events: none;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(212, 175, 55, 0.1);
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(212, 175, 55, 0.5);
+        border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(212, 175, 55, 0.7);
+    }
+
+    /* Curtain animations */
+    .curtain-left,
+    .curtain-right {
+        box-shadow: inset -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .curtain-top,
+    .curtain-bottom {
+        box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Smooth transitions */
+    * {
+        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+    }
+
+    /* Enhanced glow effects */
+    .glow-gold {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.4), 0 0 40px rgba(212, 175, 55, 0.2);
+    }
+
+    .glow-gold-hover:hover {
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Ripple animation */
+    @keyframes ripple {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+
+    /* Interactive cursor effects */
+    .interactive-element {
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .interactive-element:hover {
+        transform: translateY(-2px);
+    }
+}

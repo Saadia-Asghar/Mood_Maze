@@ -1,0 +1,32 @@
+===========================================
+WHERE TO ADD YOUR SOUND FILE
+===========================================
+
+📁 Directory Path:
+   d:\dsaaaa\mood-maze\public\sounds\
+
+📄 File to Add:
+   click.mp3
+
+✅ Full Path:
+   d:\dsaaaa\mood-maze\public\sounds\click.mp3
+
+===========================================
+
+HOW TO ADD:
+
+1. Download a click sound from:
+   https://mixkit.co/free-sound-effects/
+   (Search for "button click")
+
+2. Save the downloaded file to:
+   d:\dsaaaa\mood-maze\public\sounds\
+
+3. Rename it to exactly: click.mp3
+
+4. Restart your dev server (npm run dev)
+
+===========================================
+
+That's it! The app will automatically use the sound.
+
