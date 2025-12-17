@@ -8,39 +8,39 @@ export default {
     extend: {
       colors: {
         cinema: {
-          // Deep blacks with subtle variations
-          black: '#0d0d0d',
-          blackLight: '#1a1a1a',
-          blackDark: '#050505',
+          // Deep Maroon Backgrounds (replacing black)
+          black: '#5e0a0a',          // Rich deep maroon (Primary background)
+          blackLight: '#7a121d',     // Lighter burgundy (Card/Modal backgrounds)
+          blackDark: '#3b0404',      // Very dark maroon (Shadows/Darker areas)
 
-          // Maroon Red spectrum (main theme - replaces gold)
-          gold: '#8B0000',           // Dark maroon (replaces gold)
-          goldLight: '#B22222',      // Firebrick red (replaces goldLight)
-          goldDark: '#5C0000',       // Deep maroon (replaces goldDark)
-          goldBright: '#DC143C',     // Crimson (replaces goldBright)
+          // Luxury Gold Spectrum (Text, Icons, Buttons)
+          gold: '#FFD700',           // Standard vibrant gold
+          goldLight: '#FFE566',      // Lighter, brighter gold (Highlights)
+          goldDark: '#C5A000',       // Darker antique gold
+          goldBright: '#FFFF33',     // High-intensity gold (Active states)
 
-          // Deep burgundy reds (velvet curtain theme)
-          red: '#8B0000',            // Dark maroon
+          // Decorative Reds
+          red: '#8B0000',            // Classic dark red
           redLight: '#B22222',       // Firebrick
-          redDark: '#5C0000',        // Deep maroon
-          burgundy: '#6B0F1A',       // Burgundy
+          redDark: '#5C0000',        // Deepest red
+          burgundy: '#6B0F1A',       // Burgundy trim
 
-          // Accent colors (maroon theme)
-          spotlight: '#FFE6E6',      // Light pink tint
-          amber: '#A52A2A',          // Brown-red
-          bronze: '#8B4513',         // Saddle brown
+          // Accents
+          spotlight: '#FFF9C4',      // Warm gold spotlight
+          amber: '#FFC107',          // Amber
+          bronze: '#CD7F32',         // Bronze details
 
           // UI colors
-          green: '#2ecc71',
-          greenLight: '#58d68d',
-          blue: '#3498db',
-          blueLight: '#5dade2',
-          purple: '#9b59b6',
-          purpleLight: '#bb8fce',
+          green: '#27AE60',          // Emerald green
+          greenLight: '#2ECC71',
+          blue: '#2980B9',
+          blueLight: '#3498DB',
+          purple: '#8E44AD',
+          purpleLight: '#9B59B6',
 
           // Overlays
-          overlay: 'rgba(13,13,13,0.92)',
-          spotlightGlow: 'rgba(139,0,0,0.15)',  // Maroon glow
+          overlay: 'rgba(59, 4, 4, 0.95)',       // Dark maroon overlay
+          spotlightGlow: 'rgba(255, 215, 0, 0.2)', // Stronger gold glow
         },
       },
       fontFamily: {
