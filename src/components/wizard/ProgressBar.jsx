@@ -28,16 +28,16 @@ export function ProgressBar({ current, total }) {
                         transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                     />
                 </motion.div>
-                
+
                 {/* Progress dots */}
                 <div className="absolute inset-0 flex items-center justify-between px-1">
-                    {[...Array(total)].map((_, i) => (
+                    {[...Array(total + 1)].map((_, i) => (
                         <motion.div
                             key={i}
                             className={cn(
                                 'w-2 h-2 rounded-full',
-                                i < current 
-                                    ? 'bg-cinema-gold shadow-[0_0_10px_rgba(212,175,55,0.8)]' 
+                                i < current
+                                    ? 'bg-cinema-gold shadow-[0_0_10px_rgba(212,175,55,0.8)]'
                                     : 'bg-cinema-gold/20'
                             )}
                             animate={i < current ? {
