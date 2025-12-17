@@ -29,3 +29,19 @@ dist-ssr
 .env.production.local
 .env.development.local
 .env.test.local
+
+# Agent/Generated Docs (Maintain in local, ignore in repo)
+API_INTEGRATION_COMPLETE.md
+API_KEY_CONFIGURED.md
+CLEANUP_SUMMARY.md
+DEBUG_SIGNIN.md
+DEPLOY_TO_VERCEL.md
+DSA_EXPLANATION.md
+FEATURES_ADDED.md
+FIX_BLANK_PAGE.md
+FIX_VERCEL_SIGNIN.md
+GET_TMDB_API_KEY.md
+PROJECT_COMPLETE.md
+QUICK_DEPLOY.md
+SOUND_AND_API_GUIDE.md
+SOUND_FILES.md
