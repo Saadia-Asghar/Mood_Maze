@@ -1,15 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, X, RotateCcw, ArrowRight } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowRight, Home } from 'lucide-react';
 import { getImageUrl } from '../../lib/utils';
 import { Button } from '../ui/Button';
 import { CameraReel } from '../ui/CameraReel';
+import useStore from '../../store/useStore';
+import { useSound } from '../../hooks/useSound';
 
 /**
  * Batch Review - The "Intermission" view showing 3 cards
  */
 export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
     const [isSpinning, setIsSpinning] = React.useState(false);
+    const { playSound } = useSound();
 
     const handleGenerateAgain = () => {
         setIsSpinning(true);
@@ -46,7 +49,7 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                         className="relative"
                     >
                         {/* Card */}
-                        <motion.div 
+                        <motion.div
                             className="relative rounded-xl overflow-hidden border-2 border-cinema-gold/50 
                           shadow-[0_0_20px_rgba(212,175,55,0.2)] aspect-[2/3] group cursor-pointer"
                             whileHover={{ scale: 1.05, y: -8 }}
@@ -71,16 +74,16 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                             </div>
 
                             {/* Status badge */}
-                            <motion.div 
+                            <motion.div
                                 className="absolute top-4 right-4"
                                 initial={{ scale: 0, rotate: -180 }}
                                 animate={{ scale: 1, rotate: 0 }}
                                 transition={{ type: 'spring', stiffness: 200, delay: index * 0.1 }}
                             >
                                 {item.action === 'saved' ? (
-                                    <motion.div 
+                                    <motion.div
                                         className="bg-gradient-to-br from-cinema-green to-cinema-greenLight rounded-full p-3 border-2 border-white shadow-lg"
-                                        animate={{ 
+                                        animate={{
                                             scale: [1, 1.1, 1],
                                             boxShadow: [
                                                 '0 0 20px rgba(46, 204, 113, 0.5)',
@@ -93,7 +96,7 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                                         <Check className="w-6 h-6 text-white" />
                                     </motion.div>
                                 ) : (
-                                    <motion.div 
+                                    <motion.div
                                         className="bg-gradient-to-br from-red-600 to-red-700 rounded-full p-3 border-2 border-white shadow-lg"
                                         whileHover={{ scale: 1.1 }}
                                     >
@@ -111,24 +114,63 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="flex flex-col md:flex-row items-center justify-center gap-6"
+                className="flex flex-wrap items-center justify-center gap-12 md:gap-20"
             >
-                {/* Show 3 More button */}
-                <Button
-                    variant="primary"
-                    size="lg"
-                    onClick={onShowMore}
-                    className="min-w-[200px]"
-                >
-                    <ArrowRight className="w-5 h-5 mr-2" />
-                    Show 3 More
-                </Button>
+                {/* Show 3 More - Play Wheel */}
+                <div className="flex flex-col items-center gap-3 group">
+                    <motion.button
+                        onClick={() => {
+                            playSound('click');
+                            onShowMore();
+                        }}
+                        className="relative w-20 h-20 rounded-full border-4 border-cinema-gold 
+                                 bg-gradient-to-br from-cinema-red to-cinema-redLight 
+                                 flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.4)]
+                                 group-hover:shadow-[0_0_50px_rgba(212,175,55,0.6)] transition-all duration-300"
+                        whileHover={{ scale: 1.1, rotate: 90 }}
+                        whileTap={{ scale: 0.9 }}
+                    >
+                        <div className="absolute inset-2 rounded-full border border-cinema-gold/50 border-dashed animate-[spin_10s_linear_infinite]" />
+                        <ArrowRight className="w-10 h-10 text-cinema-gold drop-shadow-lg" />
+                    </motion.button>
+                    <span className="text-cinema-gold font-bold text-lg tracking-wide group-hover:text-white transition-colors">
+                        Show 3 More
+                    </span>
+                </div>
 
-                {/* Camera Reel - Generate Again */}
-                <div className="flex flex-col items-center gap-2">
-                    <CameraReel onClick={handleGenerateAgain} isSpinning={isSpinning} />
-                    <span className="text-cinema-gold/60 text-sm font-semibold">
+                {/* Start Over - Camera Reel */}
+                <div className="flex flex-col items-center gap-3">
+                    <CameraReel
+                        onClick={() => {
+                            playSound('reel');
+                            handleGenerateAgain();
+                        }}
+                        isSpinning={isSpinning}
+                        size="lg"
+                    />
+                    <span className="text-cinema-gold/60 text-sm font-semibold group-hover:text-cinema-gold transition-colors">
                         Start Over
+                    </span>
+                </div>
+
+                {/* Home - Home Wheel */}
+                <div className="flex flex-col items-center gap-3 group">
+                    <motion.button
+                        onClick={() => {
+                            playSound('click');
+                            useStore.getState().setCurrentPage('lobby');
+                        }}
+                        className="relative w-16 h-16 rounded-full border-2 border-cinema-gold/50 
+                                 bg-cinema-black/80 flex items-center justify-center 
+                                 shadow-[0_0_20px_rgba(212,175,55,0.2)]
+                                 group-hover:border-cinema-gold group-hover:bg-cinema-black"
+                        whileHover={{ scale: 1.1, rotate: -10 }}
+                        whileTap={{ scale: 0.9 }}
+                    >
+                        <Home className="w-8 h-8 text-cinema-gold/70 group-hover:text-cinema-gold transition-colors" />
+                    </motion.button>
+                    <span className="text-cinema-gold/60 text-sm font-semibold group-hover:text-cinema-gold transition-colors">
+                        Lobby
                     </span>
                 </div>
             </motion.div>
