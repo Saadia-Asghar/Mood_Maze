@@ -3,7 +3,7 @@ import { Film, Library, Home, Search, Volume2, VolumeX, LogIn, User, LogOut } fr
 import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../../store/useStore';
 import { signInWithGoogle, signOut, auth } from '../../lib/firebase';
-import { useAuthState } from '../../hooks/useAuthState';
+import { useSound } from '../../hooks/useSound';
 
 /**
  * Header component with navigation, search, sound toggle, and auth
@@ -14,6 +14,7 @@ export function Header() {
     const library = useStore(state => state.library);
     const soundEnabled = useStore(state => state.soundEnabled);
     const toggleSound = useStore(state => state.toggleSound);
+    const { playSound } = useSound();
 
     const [showUserMenu, setShowUserMenu] = useState(false);
     const { user, loading } = useAuthState();
@@ -25,6 +26,7 @@ export function Header() {
 
 
     const handleSignIn = async () => {
+        playSound('click');
         console.log('🖱️ Sign In button clicked!');
         try {
             console.log('Calling signInWithGoogle...');
@@ -37,6 +39,7 @@ export function Header() {
 
 
     const handleSignOut = async () => {
+        playSound('click');
         try {
             await signOut();
             setShowUserMenu(false);
@@ -54,7 +57,10 @@ export function Header() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="flex items-center gap-3 cursor-pointer group"
-                        onClick={() => setCurrentPage('lobby')}
+                        onClick={() => {
+                            playSound('click');
+                            setCurrentPage('lobby');
+                        }}
                         whileHover={{ scale: 1.05 }}
                     >
                         <motion.div
@@ -79,7 +85,10 @@ export function Header() {
                                 return (
                                     <motion.button
                                         key={item.id}
-                                        onClick={() => setCurrentPage(item.id)}
+                                        onClick={() => {
+                                            playSound('click');
+                                            setCurrentPage(item.id);
+                                        }}
                                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 relative
                                             ${isActive
                                                 ? 'bg-gradient-to-r from-cinema-gold to-cinema-goldLight text-cinema-black shadow-lg'
@@ -113,7 +122,10 @@ export function Header() {
 
                         {/* Search Button */}
                         <motion.button
-                            onClick={() => setCurrentPage('library')}
+                            onClick={() => {
+                                playSound('click');
+                                setCurrentPage('library');
+                            }}
                             className="p-2.5 rounded-lg text-cinema-gold hover:bg-cinema-gold/20 border-2 border-transparent hover:border-cinema-gold/50 transition-all"
                             whileHover={{ scale: 1.1, rotate: 15 }}
                             whileTap={{ scale: 0.9 }}
@@ -124,7 +136,13 @@ export function Header() {
 
                         {/* Sound Toggle */}
                         <motion.button
-                            onClick={toggleSound}
+                            onClick={() => {
+                                // Important: We play sound even if we are toggling OFF, so user hears feedback
+                                // But if toggling ON, we definitely want to hear it.
+                                // Actually, toggleSound in store flips the state.
+                                playSound('click');
+                                toggleSound();
+                            }}
                             className={`p-2.5 rounded-lg transition-all border-2 ${soundEnabled
                                 ? 'text-cinema-gold bg-cinema-gold/10 border-cinema-gold/50'
                                 : 'text-cinema-gold/50 border-transparent hover:border-cinema-gold/30'
@@ -162,7 +180,10 @@ export function Header() {
                         ) : user ? (
                             <div className="relative">
                                 <motion.button
-                                    onClick={() => setShowUserMenu(!showUserMenu)}
+                                    onClick={() => {
+                                        playSound('click');
+                                        setShowUserMenu(!showUserMenu);
+                                    }}
                                     className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gradient-to-r from-cinema-gold/20 to-cinema-goldDark/20 border-2 border-cinema-gold/50 hover:border-cinema-gold transition-all"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}

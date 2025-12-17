@@ -7,6 +7,7 @@ import {
     Sofa, Activity, Footprints,
     Film, Disc, Clock, Sparkles
 } from 'lucide-react';
+import { useSound } from '../../hooks/useSound';
 
 // Icon mapping for better visual consistency
 const iconMap = {
@@ -47,6 +48,8 @@ export function QuestionCard({
     questionNumber,
     totalQuestions
 }) {
+    const { playSound } = useSound();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -88,6 +91,7 @@ export function QuestionCard({
                         <motion.button
                             key={option.value}
                             onClick={() => {
+                                playSound('click');
                                 onSelect(option.value);
                                 if (navigator.vibrate) {
                                     navigator.vibrate(20); // Subtle tick
