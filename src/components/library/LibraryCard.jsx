@@ -47,13 +47,7 @@ export function LibraryCard({ movie, onRemove }) {
                         </div>
                     </div>
 
-                    {/* Score badge */}
-                    {movie.score && (
-                        <div className="absolute top-3 right-3 bg-gradient-to-br from-cinema-gold to-cinema-goldDark text-cinema-black 
-                                      rounded-full w-10 h-10 flex items-center justify-center font-bold text-xs shadow-lg border-2 border-cinema-gold/50">
-                            {movie.score}
-                        </div>
-                    )}
+
                 </div>
 
                 {/* BACK */}
