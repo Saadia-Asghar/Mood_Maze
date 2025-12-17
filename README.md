@@ -2,7 +2,9 @@
 
 **Tagline:** *Stop scrolling. Start watching.*
 
-MoodMaze is a cinematic movie recommendation web application that uses a **Decision Tree** to analyze your current mood and a **Max-Heap Priority Queue** to rank movies in real-time. It features a unique "Rule of Three" workflow where users review movies in batches of three, creating a deliberate and engaging discovery experience.
+MoodMaze is a cinematic movie recommendation web application designed to solve "Choice Paralysis." It uses sophisticated **Data Structures & Algorithms (DSA)** to analyze your current mood in real-time and hand-picks the perfect movie for you using a **Max-Heap Priority Queue** and **Weighted Scoring Algorithm**.
+
+It features a unique "Rule of Three" experience: instead of an endless feed, you review a curated batch of 3 movies at a time, making the discovery process deliberate and engaging.
 
 ![MoodMaze Banner](https://via.placeholder.com/1200x400/0a0a0a/d4af37?text=MoodMaze+-+The+Cinematic+Engine)
 
@@ -10,101 +12,91 @@ MoodMaze is a cinematic movie recommendation web application that uses a **Decis
 
 ## ✨ Features
 
-### 🎯 Core Features
-- **Mood-Based Recommendations**: Get movie suggestions based on your *current* mood, not just viewing history
-- **Smart DSA Engine**: Max-Heap priority queue ranks movies with a sophisticated scoring algorithm
-- **The "Rule of Three"**: Review movies in batches of 3 for a focused decision-making experience
-- **Persistent Library**: Save your favorite movies with localStorage persistence
-- **Demo Mode**: Works without an API key using curated demo data
+### 🎯 Smart Recommendations
+- **Mood-Based Engine**: Analyzes your Social Situation, Vibe, Energy, Era, and Risk Tolerance.
+- **Advanced DSA**: Implements a custom **Max-Heap** data structure to bubble up the highest-scoring movies in **O(1)** time.
+- **Weighted Scoring**: assigns nuanced numerical scores to movies based on quiz answers (e.g., +30 points for "90s" if you selected "Classic").
 
-### 🎨 Premium UX
-- **Vintage Cinema Theme**: Dark mode with gold accents, velvet red, and film grain textures
-- **3D Flip Cards**: Interactive movie cards with smooth flip animations
-- **Camera Reel Animation**: Spinning reel button to restart the experience
-- **Sound Effects**: Optional audio feedback for interactions
-- **Responsive Design**: Works beautifully on desktop, tablet, and mobile
+### 🎨 Premium Cinematic UX
+- **Theme**: Immersive "Cinema Mode" with dark aesthetics, gold accents (#d4af37), and subtle film grain.
+- **3D Interactions**: Movie cards that flip in 3D to reveal plot details.
+- **Micro-Interactions**: Satisfying sound effects (reel spinning, clicking) and smooth animations powered by **Framer Motion**.
+- **The "Rule of Three"**: A unique batching system that reduces cognitive load by showing only 3 options at a time.
+
+### ☁️ Cloud & Persistence
+- **Google Firebase Integration**: Secure authentication via Google Sign-In.
+- **Cloud Sync**: Your "My Library" is saved to the cloud (Firestore), accessible from any device.
+- **Crash Prevention**: Robust Error Boundaries ensure the app stays stable even if services fail.
 
 ---
 
 ## 🧠 Technical Architecture
 
 ### Tech Stack
-- **Framework**: React 18 + Vite
-- **Styling**: Tailwind CSS with custom cinema theme
-- **Animation**: Framer Motion for smooth transitions
-- **State Management**: Zustand with localStorage persistence
+- **Frontend**: React 18 + Vite (Fast & Modern)
+- **Styling**: Tailwind CSS (Custom Cinema Theme)
+- **State Management**: Zustand (Global Store)
+- **Backend/Auth**: Firebase (Auth & Firestore)
+- **Animations**: Framer Motion
 - **Icons**: Lucide React
 - **API**: TMDB (The Movie Database)
-- **Effects**: canvas-confetti for celebrations
 
-### Data Structures & Algorithms
+### Data Structures & Algorithms (DSA) Implementation
 
-#### 1. Max-Heap Priority Queue
-```javascript
-class MovieHeap {
-  push(movie)    // O(log N) - Insert with bubble up
-  pop()          // O(log N) - Extract max with bubble down
-  peek()         // O(1)     - View top movie
-}
-```
+#### 1. Max-Heap Priority Queue (`dsa.js`)
+We use a Binary Heap to efficiently manage the movie list.
+- **Why?** To retrieve the "Best Match" instantly without sorting the entire dataset.
+- **Complexity**: `push()` is O(log N), `pop()` is O(log N), `peek()` is O(1).
 
-#### 2. Scoring Algorithm
-Movies are scored based on 5 quiz questions:
-- **Social Context**: Family, date, friends, or solo
-- **Vibe**: Mind-bending, feel-good, adrenaline, or emotional
-- **Energy Level**: Low, medium, or high
-- **Era Preference**: Classic, 90s-2000s, modern, or any
-- **Risk Tolerance**: Safe picks, balanced, or hidden gems
+#### 2. Weighted Scoring Heuristic
+Movies are not just "filtered"; they are *ranked*.
+- **Logic**: `Score = (Rating * 10) + (Vibe Bonus) + (Era Bonus) + (Energy Penalty)`
+- **Example**: If User selects "Low Energy", Action movies get a -15 penalty, while Dramas get a +20 boost.
 
-#### 3. Hash Set for Rejected Movies
-```javascript
-rejectedIds = new Set()  // O(1) lookup to avoid showing rejected movies
-```
+#### 3. Hash Set (`rejectedIds`)
+We use a JavaScript `Set` (Hash Set implementation) to track rejected movies.
+- **Why?** To instantly check if a movie should be hidden.
+- **Complexity**: O(1) Lookup time (vs O(N) for Arrays).
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 16+ and npm
-- (Optional) TMDB API key for full functionality
+- Node.js 16+
+- A Google Firebase Project (for Auth/DB)
+- A TMDB API Key (Optional - runs in Demo Mode without it)
 
 ### Installation
 
 1. **Clone the repository**
-```bash
-git clone <your-repo-url>
-cd mood-maze
-```
+   ```bash
+   git clone https://github.com/yourusername/mood-maze.git
+   cd mood-maze
+   ```
 
 2. **Install dependencies**
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-3. **Set up environment variables** (Optional)
-```bash
-# Copy the example file
-cp .env.example .env
+3. **Set up environment**
+   Create a `.env` file in the root directory:
+   ```env
+   VITE_TMDB_API_KEY=your_tmdb_key
+   VITE_FIREBASE_API_KEY=your_firebase_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   # ... add other firebase config keys
+   ```
 
-# Edit .env and add your TMDB API key
-VITE_TMDB_API_KEY=your_api_key_here
-```
+4. **Run local server**
+   ```bash
+   npm run dev
+   ```
 
-**Get a free TMDB API key:**
-1. Go to [https://www.themoviedb.org/signup](https://www.themoviedb.org/signup)
-2. Create an account
-3. Go to Settings → API → Request an API Key
-4. Choose "Developer" and fill out the form
-5. Copy your API key to `.env`
-
-4. **Run the development server**
-```bash
-npm run dev
-```
-
-5. **Open your browser**
-Navigate to `http://localhost:5173`
+5. **Open in Browser**
+   Visit `http://localhost:5173`
 
 ---
 
@@ -113,199 +105,46 @@ Navigate to `http://localhost:5173`
 ```
 mood-maze/
 ├── src/
-│   ├── assets/
-│   │   ├── sounds/          # Audio files (optional)
-│   │   └── images/          # Images and textures
 │   ├── components/
-│   │   ├── ui/              # Reusable UI components
-│   │   │   ├── Button.jsx
-│   │   │   ├── Badge.jsx
-│   │   │   └── CameraReel.jsx
-│   │   ├── layout/          # Layout components
-│   │   │   ├── Stage.jsx
-│   │   │   └── Header.jsx
-│   │   ├── wizard/          # Quiz components
-│   │   │   ├── QuestionCard.jsx
-│   │   │   └── ProgressBar.jsx
-│   │   └── screening/       # Movie discovery components
-│   │       ├── Card3D.jsx
-│   │       └── BatchReview.jsx
-│   ├── hooks/
-│   │   ├── useTMDB.js       # API integration
-│   │   └── useSound.js      # Sound effects
+│   │   ├── library/     # 3D Cards & Library Grid
+│   │   ├── screening/   # Swiping Interface & Queues
+│   │   ├── wizard/      # The 5-Step Quiz
+│   │   └── layout/      # Header, Stage, Curtains
+│   ├── hooks/           # Custom React Hooks (useSound, useAuthState)
 │   ├── lib/
-│   │   ├── dsa.js           # DSA engine (Heap, Scoring)
-│   │   └── utils.js         # Utility functions
-│   ├── pages/
-│   │   ├── Lobby.jsx        # Landing page
-│   │   ├── Quiz.jsx         # 5-question quiz
-│   │   ├── ScreeningRoom.jsx # Main discovery interface
-│   │   └── Library.jsx      # Saved movies
-│   ├── store/
-│   │   └── useStore.js      # Zustand state management
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── public/
-├── .env.example
-├── tailwind.config.js
-├── package.json
-└── README.md
+│   │   ├── dsa.js       # The ALGORITHM (Heap + Scoring)
+│   │   ├── firebase.js  # Cloud Connection
+│   │   └── utils.js     # Helpers
+│   ├── pages/           # Main Views (Lobby, Quiz, Screening, Library)
+│   ├── store/           # Global State (Zustand)
+│   └── App.jsx          # Route Manager
+└── public/              # Static Assets (Sounds, Images)
 ```
 
 ---
 
 ## 🎮 How to Use
 
-### The User Journey
-
-1. **The Lobby**
-   - Click "Start the Show" to begin
-
-2. **The Quiz** (5 Questions)
-   - Who are you watching with?
-   - What vibe are you looking for?
-   - What's your energy level?
-   - Which era speaks to you?
-   - How adventurous are you feeling?
-
-3. **The Screening Room**
-   - View movie poster → Click to flip
-   - Read synopsis and details
-   - **Tick** (✓) to save or **Cross** (✗) to pass
-   - After 3 movies, reach the **Intermission**
-
-4. **The Intermission**
-   - Review your 3 choices
-   - **"Show 3 More"** to continue
-   - **Camera Reel** to start over with new preferences
-
-5. **Your Library**
-   - View all saved movies
-   - Remove movies you're no longer interested in
+1.  **Start the Show**: Click the main button in the Lobby.
+2.  **Take the Quiz**: Answer 5 rapid-fire questions about your current mood.
+3.  **Discovery Mode**:
+    *   **Tick (✓)**: Save to Library.
+    *   **Cross (✗)**: Reject (adds to Hash Set).
+    *   **Click Poster**: 3D Flip to see details.
+4.  **Batch Review**: After viewing 3 movies, decide to "Show More" or "Start Over".
+5.  **My Library**: Visit your collection to see your saved films.
 
 ---
 
-## 🎨 Design System
+## 👨‍💻 Team
 
-### Color Palette
-```javascript
-colors: {
-  cinema: {
-    black: '#0a0a0a',    // Background
-    gold: '#d4af37',     // Primary text & borders
-    red: '#8a0303',      // Primary actions
-    green: '#2ecc71',    // Success states
-  }
-}
-```
-
-### Typography
-- **Headers**: Playfair Display (Serif)
-- **Body**: Inter / Montserrat (Sans-serif)
-
-### Key Animations
-- Card flip: 0.6s ease-in-out
-- Camera reel spin: 1.5s cubic-bezier
-- Page transitions: Framer Motion variants
+Built with ❤️ by [Your Team Name]
+*   **Algorithm Specialist**: Recommendation Engine logic & Max-Heap.
+*   **UX Designer**: Interface, Themes, and Animations.
+*   **State Engineer**: Data flow, Zustand store, and Batching logic.
+*   **Cloud Integrator**: Firebase Auth & Database connectivity.
+*   **InteractionDev**: Sound design & 3D interactions.
 
 ---
 
-## 🔧 Configuration
-
-### Tailwind Config
-Custom theme with cinema colors, fonts, and animations defined in `tailwind.config.js`.
-
-### Environment Variables
-- `VITE_TMDB_API_KEY`: Your TMDB API key (optional, falls back to demo mode)
-
----
-
-## 📊 DSA Implementation Details
-
-### Scoring Algorithm Breakdown
-
-```javascript
-Base Score = vote_average * 10 + (popularity / 10)
-
-// Social Context Modifiers
-if (family && adult) score -= 1000
-if (family && family_genres) score += 30
-
-// Vibe Modifiers
-if (mind_bending && mystery_keywords) score += 30
-if (feel_good && positive_keywords) score += 25
-
-// Energy Modifiers
-if (low_energy && drama) score += 20
-if (high_energy && action) score += 25
-
-// Era Modifiers
-if (classic && year < 1990) score += 30
-if (modern && year > 2010) score += 30
-
-// Risk Modifiers
-if (safe && popular) score += 35
-if (high_risk && hidden_gem) score += 40
-```
-
-### Heap Operations
-- **Initialize**: O(N log N) to build heap from N movies
-- **Pop**: O(log N) to get next best movie
-- **Total for 3 movies**: O(3 log N) ≈ O(log N)
-
----
-
-## 🚢 Deployment
-
-### Build for Production
-```bash
-npm run build
-```
-
-### Deploy to Vercel/Netlify
-1. Push your code to GitHub
-2. Connect your repository to Vercel or Netlify
-3. Add `VITE_TMDB_API_KEY` as an environment variable
-4. Deploy!
-
----
-
-## 🎯 Future Enhancements
-
-- [ ] Add movie trailers (YouTube integration)
-- [ ] Social sharing of libraries
-- [ ] Advanced filters (runtime, language, etc.)
-- [ ] User accounts and cloud sync
-- [ ] Watchlist with streaming availability
-- [ ] AI-powered synopsis summaries
-
----
-
-## 📝 License
-
-MIT License - feel free to use this project for learning or portfolio purposes.
-
----
-
-## 🙏 Acknowledgments
-
-- **TMDB** for the comprehensive movie database API
-- **Framer Motion** for buttery smooth animations
-- **Tailwind CSS** for rapid UI development
-- **Lucide** for beautiful icons
-
----
-
-## 👨‍💻 Author
-
-Built with ❤️ as a portfolio project demonstrating:
-- Advanced React patterns
-- Data Structures & Algorithms
-- State management with Zustand
-- Premium UI/UX design
-- API integration
-
----
-
-**MoodMaze** - Because the best movie for you isn't always the most popular one. It's the one that matches your mood *right now*. 🎬✨
+**MoodMaze** - Because the best movie isn't the most popular one. It's the one that fits *you* right now. 🎬✨

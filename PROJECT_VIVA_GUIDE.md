@@ -1,161 +1,136 @@
-# 🎓 MoodMaze: Complete Project Viva Guide
+# 🎬 MoodMaze: The Ultimate Non-Coder's Guide & Viva Manual
 
-This document is your **ultimate study guide** for your project viva. It covers everything from the "why" and "how" of the project to a line-by-line breakdown of the code, with a special focus on **Data Structures and Algorithms (DSA)**.
-
----
-
-## 🌟 1. Project Overview
-
-**Project Name:** MoodMaze
-**Tagline:** "Don't just watch. Discover."
-**Core Problem Solved:** The "Netflix Paralysis" problem—spending more time scrolling than watching. MoodMaze solves this by using a **Max-Heap algorithm** to recommend movies based on *mood*, not just history.
-
-### What is it?
-A gamified movie discovery web app that asks you 5 simple mood-based questions and then lets you "swipe" (tick/cross) through a personalized feed of movies. It's like Tinder for movies.
+> **⚠️ IMPORTANT**: This version is for YOU and YOUR TEAM locally. Do not upload this specific text to GitHub if you want to keep your "secret sauce" explanations private.
 
 ---
 
-## 🧠 2. The Core: Data Structures & Algorithms (Major Focus)
+## 1. What is this project? (The "Elevator Pitch")
 
-**User**: *Why did you choose this logic?*
-**You**: *I used a Max-Heap to ensure O(1) time complexity for retrieving recommendations, ensuring the app feels instant.*
+**Imagine you want to watch a movie.**
+You open Netflix, scroll for 20 minutes, get overwhelmed, and turn off the TV. This is called **"Choice Paralysis."**
 
-### A. Max-Heap (Priority Queue)
-*   **Where**: `src/lib/dsa.js` -> `class MovieHeap`
-*   **Concept**: A binary tree where every parent node is greater than its children. The "root" is always the highest-scoring element.
-*   **Why we use it**:
-    *   After scoring 100+ movies, we only care about showing the **best one** first.
-    *   Sorting the whole array takes **O(N log N)** time.
-    *   Building a heap takes **O(N)**, and popping the top item takes **O(log N)**.
-    *   This makes fetching the next suggestion incredibly fast.
-*   **Code Implementation**: We manually implemented `push()`, `pop()`, `bubbleUp()`, and `bubbleDown()` methods to manage the heap array.
+**MoodMaze is the cure.**
+It is an intelligent web application that acts like your movie-buff friend. instead of showing you 10,000 bad movies, it asks you **5 simple questions about your mood** and uses a smart computer algorithm to hand-pick the *perfect* movie for right now.
 
-### B. Weighted Scoring Algorithm (Heuristic Search)
-*   **Where**: `src/lib/dsa.js` -> `calculateScore()`
-*   **Why we use it**: To translate human feelings (Quiz Answers) into computer numbers.
-*   **How it works**:
-    *   Start with `Base Score` (Movie Rating).
-    *   Match Logic:
-        *   User says "Date Night" -> +25 points to Romance/Drama.
-        *   User says "High Risk" -> +40 points to hidden gems.
-        *   User says "Low Energy" -> -15 points to Action movies.
-*   **Result**: Every movie gets a unique score for *that specific session*.
-
-### C. Hash Sets (O(1) Lookup)
-*   **Where**: `RecommendationEngine` class & `ScreeningRoom.jsx`
-*   **Concept**: A collection of *unique* keys.
-*   **Why we use it**:
-    *   To filter duplicates (`rejectedIds`, `library`).
-    *   Checking `if (array.includes(id))` is **O(N)** (slow if list is big).
-    *   Checking `if (set.has(id))` is **O(1)** (instant).
+It’s **"Tinder for Movies"** meeting **"Data Science."**
 
 ---
 
-## 🏗️ 3. Architecture & Tech Stack
+## 2. How does the "Magic" work? (The Logic)
 
-*   **Frontend**: React + Vite (Fast, component-based UI).
-*   **Animations**: **Framer Motion** (Smooth transitions & micro-interactions).
-*   **State Management**: Zustand (Simpler than Redux, easier to explain).
-*   **Styling**: Tailwind CSS (Utility-first, responsive).
-*   **Database/Auth**: Firebase (Real-time syncing, serverless auth).
-*   **API**: TMDB (The Movie Database) for real movie data.
+We didn't just use `if/else` statements. We used **Data Structures & Algorithms (DSA)**. Here is the analogy to explain to your examiner:
 
----
+### The "Waiter" Analogy (The Algorithm)
+Imagine a waiter at a restaurant.
+1.  **The Menu (The Database)**: We have thousands of movies from TMDB (The Movie Database).
+2.  **The Order (The Quiz)**: You tell the waiter: *"I'm on a date, I want something romantic, but thrilling, from the 90s."*
+3.  **The Chef's Brain (The Scoring System)**:
+    *   The chef looks at *Titanic*.
+    *   Is it romantic? **YES (+30 points)**.
+    *   Is it thrilling? **YES (+20 points)**.
+    *   Is it from the 90s? **YES (+50 points)**.
+    *   **Total Score: 100/100**.
+    *   Then the chef looks at *Shrek*.
+    *   Romantic? Kinda (+10). Thrilling? No (0). 90s? No (0).
+    *   **Total Score: 10/100**.
 
-## 📂 4. File-by-File Walkthrough (The "How it's made")
-
-If user/panel asks: *"Explain your folder structure."*
-
-### **Root Configuration**
-*   `vite.config.js`: Configures the build tool.
-*   `tailwind.config.js`: Defines our custom **Maroon & Gold** color theme (`colors: { cinema: { ... } }`).
-*   `.env`: Stores secret API keys (TMDB, Firebase). **Never push this to GitHub.**
-
-### **A. `src/main.jsx` & `src/App.jsx`**
-*   **Entry Point**: `main.jsx` injects the React app into the HTML `root`.
-*   **Router**: `App.js` currently renders the `Stage` component which handles the different "Pages" (`lobby`, `quiz`, `screening`, `library`) using conditional rendering based on Zustand state.
-
-### **B. `src/store/useStore.js` (The Brain)**
-*   **Importance**: Critical.
-*   **What it does**:
-    *   Holds **Global State**: `user`, `library`, `quizAnswers`, `rejectedIds`.
-    *   **Batch Logic**: Tracks `currentBatch` (movies reviewed in this session).
-    *   **Logic**: `addToLibrary` checks if user is logged in. If yes, it syncs to Firebase.
-    *   **Persistence**: Uses `persist` middleware to save state to LocalStorage.
-
-### **C. `src/lib/` (The Logic)**
-*   **`dsa.js`**: **Most Important File**. Contains the `MovieHeap`, `calculateScore`, and `RecommendationEngine` classes. This is the pure logic layer.
-*   **`firebase.js`**: Initializes Firebase app.
-*   **`firebaseService.js`**: Helper functions for Firestore (`addMovieToLibrary`, `syncToCloud`) and Auth.
-*   **`soundManager.js`**: Handles **Audio Feedback** (clicks, success chimes) to make the app feel "alive".
-
-### **D. `src/pages/` (The Views)**
-1.  **`Lobby.jsx`**: The landing page. Has the "Start" button.
-2.  **`Quiz.jsx`**:
-    *   Displays 5 questions with **Keyboard Support** (Arrow keys, 1-4).
-    *   Updates `quizAnswers` in the store.
-    *   Uses **Framer Motion** for smooth question transitions.
-3.  **`ScreeningRoom.jsx`** (The Main Interface):
-    *   **Batch System**: Presents movies in **batches of 3** to reduce decision fatigue.
-    *   **Interaction**: Handles Tick (Save) and Cross (Reject).
-    *   **Review**: After 3 swipes, shows a "Batch Review" summary.
-    *   **Fetching**: Calls `engine.getNextMovie()` (pops from Heap).
-4.  **`Library.jsx`**:
-    *   Fetches `library` from store.
-    *   Renders grid of **Interactive 3D Cards**.
-    *   Uses **Sound Effects** for interactions (click, remove).
-    *   Allows text search and genre filtering.
-
-### **E. `src/components/` (The UI Bricks)**
-*   **`layout/Header.jsx`**: Navigation, Search, and Auth.
-*   **`screening/Card3D.jsx`**: The "Star" component.
-    *   **Visuals**: Uses CSS 3D transforms (`rotateY`) for a premium feel.
-    *   **Glassmorphism**: Frosted glass effect for modern aesthetics.
-*   **`library/LibraryCard.jsx`**: Reusable 3D flip card for the library view.
-*   **`screening/BatchReview.jsx`**: Summary screen shown after every 3 movies.
----
-
-## ⚙️ 5. Key Workflows (How Data Flows)
-
-### **Workflow 1: The Recommendation Pipeline**
-1.  User enters `Quiz`. Answers stored in `useStore`.
-2.  User hits "Start". `ScreeningRoom` mounts.
-3.  **API Call**: `fetchMixedMovies()` gets raw movie list from TMDB.
-4.  **DSA Engine**:
-    *   `new RecommendationEngine()` created.
-    *   `initialize()` called with movies + answers.
-    *   Movies are scored and pushed into **Max-Heap**.
-5.  **Render**: Engine `pop()`s the top movie. React renders it.
-
-### **Workflow 2: The Batch Review Cycle**
-1.  **Swipe**: User Ticks or Crosses a movie.
-2.  **Sound**: `soundManager` plays feedback (Success/Reject sound).
-3.  **Counter**: `currentBatch` size increases.
-4.  **Checkpoint**: When 3 movies are reviewed:
-    *   **Pause Recommendation**: Show `BatchReview` screen.
-    *   **Decision**: User can "Show More" or "Generate Again".
-    *   **Psychology**: Prevents "doom-scrolling" by breaking the flow.
-5.  **Sync**: If "Saved", movie is synced to Firebase (if logged in).
+### The "VIP Line" (The Max-Heap)
+Now, we have scores for 20 movies. We need to show you the best one first.
+*   **The Slow Way (Sorting)**: Ordering *everyone* in the restaurant by height. This takes a long time.
+*   **The Smart Way (Max-Heap)**: A "King of the Hill" game. We put all movies in a pile, but the "Heaviest" (Highest Score) movie naturally bubbles up to the top.
+*   **Why we used it**: We don't care about the 50th best movie. We only care about the **#1 best movie**. A Max-Heap lets us grab the #1 movie instantly (technically called **O(1)** time complexity).
 
 ---
 
-## 📝 Viva Questions & Answers Cheat Sheet
+## 3. Explaining the Tech Stack (Layman Terms)
 
-**Q: Why didn't you just sort the array instead of using a Heap?**
-**A:** Sorting is O(N log N). While manageable for small lists, a Heap is conceptually arguably better for "priority queue" behavior where we might want to dynamically add more movies later without re-sorting the whole list. Ideally, heaps allow O(log N) insertion.
+If they ask "What did you use to build this?", say this:
 
-**Q: How do you handle duplicates?**
-**A:** We use a `Set` data structure (`rejectedIds`) which gives us O(1) lookup time to check if a movie ID has already been processed.
+*   **React (The Lego Blocks)**:
+    *   Instead of writing one giant messy file, we built "Components".
+    *   Think of `Button`, `Card`, and `Header` as Lego bricks. We just snap them together to build the page.
+    *   *Why?* It makes the code clean and reusable.
 
-**Q: Where is the database?**
-**A:** We use **Firebase Firestore** (NoSQL). It stores JSON-like documents. Because our data structure (Lists of movies) maps perfectly to JSON, NoSQL is faster and more flexible than SQL here.
+*   **Zustand (The Brain/Memory)**:
+    *   When you switch from the "Quiz Page" to the "Movie Page", the app needs to *remember* your answers.
+    *   Zustand is a global brain that holds this information so any page can read it.
 
-**Q: Is the site responsive?**
-**A:** Yes, we used **Tailwind CSS** with mobile-first classes (e.g., `grid-cols-1 md:grid-cols-3`) to ensuring it works on phones and laptops.
+*   **Tailwind CSS (The Stylist)**:
+    *   This is what makes the app look like a premium cinema (Dark mode, Gold text).
+    *   It handles the colors, spacing, and layout.
 
-**Q: Why use Zustand instead of Redux?**
-**A:** Redux has a lot of boilerplate code (Actions, Reducers, Types). Zustand provides the same global state capabilities with a simpler hook-based API (`useStore`), making the code cleaner and easier to maintain for a project of this scale.
+*   **Firebase (The Cloud)**:
+    *   This is Google's backend. It is our "Filing Cabinet in the Sky".
+    *   When you click "Save Movie", we write that movie's name into a permanent file in Google's cloud.
+    *   This allows you to close the browser, come back tomorrow, and still see your saved movies.
 
 ---
 
-*Good luck with your Viva! You have built a solid, scientifically grounded application.*
+## 4. The 5 Team Roles (Who says what?)
+
+Divide these scripts among your 5 members.
+
+### 👤 Member 1: The "Algorithm Expert" (Focus: `dsa.js`)
+**Q: What is the unique feature of this project?**
+> "The heart of MoodMaze is our **Weighted Scoring Algorithm**. Unlike simple apps that just filter by genre, we *rank* movies. We take the user's answers (like 'Social Context' or 'Energy Level') and assign numerical weights to movie attributes. For example, if a user wants a 'Low Energy' movie, we boost Drama films by +20 points and penalize Action films by -15 points. This creates a nuanced recommendation."
+
+**Q: Where is the DSA?**
+> "We implemented a **Max-Heap**, which is a Priority Queue data structure. It ensures that no matter how many movies we score, the highest-matching movie is always accessible in **O(1)** constant time. This makes our app incredibly fast."
+
+### 👤 Member 2: The "Frontend Architect" (Focus: `Quiz.jsx`, `Stage.jsx`)
+**Q: How did you design the UI?**
+> "I focused on **User Experience (UX)**. The goal was to combat 'Decision Fatigue', so I designed the Quiz to feel like a game, not a form. I utilized **Framer Motion** to create cinematic transitions—like curtains opening or cards flipping. We used a 'Component-Based Architecture' with React, meaning I built reusable pieces like the `ProgressBar` and `QuestionCard` that can be used anywhere."
+
+### 👤 Member 3: The "State Logic Engineer" (Focus: `useStore.js`, `ScreeningRoom.jsx`)
+**Q: How does the app handle data?**
+> "I managed the **State Flow**. I used a library called Zustand to create a 'Global Store'. Think of it as the app's short-term memory. It tracks the user's current step in the quiz, their answers, and the list of movies currently on screen. I also implemented a 'Batching System', where we strictly verify 3 recommended movies at a time to ensure quality before showing them to the user."
+
+### 👤 Member 4: The "Backend/Cloud Integrator" (Focus: `firebase.js`)
+**Q: Is the data persistent?**
+> "Yes. I implemented the **Cloud Infrastructure** using Google Firebase. I set up Authentication so users can sign in with their Google accounts securelly. I also linked a **NoSQL Database (Firestore)**. This means every time a user 'Likes' a movie, we perform a write operation to the cloud. I also realized safety is important, so I added 'Error Boundaries'—if the cloud connection fails, the app doesn't crash; it degrades gracefully."
+
+### 👤 Member 5: The "Interaction & Polish Specialist" (Focus: `useSound.js`, `Library.jsx`)
+**Q: What makes the app feel premium?**
+> "I focused on **Micro-Interactions**. I built a custom Hook called `useSound` that plays specific audio cues (like a 'film reel' sound or a 'satisfying click') to trigger dopamine responses. I also built the 'Library' view with 3D CSS transformations. When you click a poster, it flips 180 degrees in 3D space to reveal the plot. This requires complex CSS perspective math."
+
+---
+
+## 5. Walkthrough of the Code (File by File)
+
+If the teacher opens a specific file and asks "What does this do?", use these cheat sheets:
+
+### `src/lib/dsa.js` (The Brain)
+*   **lines 10-124 (MovieHeap)**: This is the **Data Structure**. It contains methods like `push` (add movie), `pop` (remove best movie), and `bubbleUp` (sort the movie to the right spot).
+*   **lines 136-271 (calculateScore)**: This is the **Math**. It contains the `if/else` logic that adds points based on answers.
+
+### `src/store/useStore.js` (The Memory)
+*   This uses **Zustand**.
+*   Look for `create((set) => ({ ... }))`. This creates the global object.
+*   `currentBatch`: Holds the 3 movies you see on screen.
+*   `library`: Holds the movies you Liked.
+*   `rejectedIds`: A **Set** (Hash Set) of movies you hated.
+
+### `src/hooks/useSound.js` (The Sound)
+*   It's a **Custom Hook**.
+*   It loads MP3 files from the computer's folder.
+*   It has a safety switch: `if (!soundEnabled) return;`.
+
+### `src/pages/ScreeningRoom.jsx` (The Tinder Screen)
+*   **`useEffect`**: This runs when the page loads. It tells the recommendation engine "Hey, wake up and give me movies!".
+*   **`handleSwipe`**: This function runs when you click Tick or Cross. It plays a sound, saves the movie (or blocks it), and asks for the next one.
+
+---
+
+## 6. Common Viva "Trick Questions"
+
+**Q: Why React and not plain HTML/CSS?**
+> **A:** simple HTML is static. We needed a **Single Page Application (SPA)** that feels like a mobile app. React allows us to update parts of the screen (like the movie card) *without* reloading the entire website.
+
+**Q: Why Max-Heap? Why not just `array.sort()`?**
+> **A:** `array.sort()` takes **O(N log N)** time. If we have 10,000 movies, that's slow. `heap.pop()` takes **O(log N)** which is much faster. Also, we don't need the *whole* list sorted, we just need the *top* one. A heap is designed exactly for that.
+
+**Q: What happens if the internet goes down?**
+> **A:** We have a 'Demo Mode'. If the API key fails or internet cuts out, the app automatically switches to a local dataset of 200 popular movies so the user can still play.
+
+**Q: How do you handle checking if a movie was already rejected?**
+> **A:** We use a **Set** (Hash Set). Checking `Set.has(id)` is **O(1)** (instant). If we used an Array, we would have to loop through the whole array every time, which is **O(N)**.
