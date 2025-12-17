@@ -13,6 +13,12 @@ export function useAuthState() {
     const setCurrentUser = useStore(state => state.setCurrentUser);
 
     useEffect(() => {
+        if (!auth) {
+            console.warn('Firebase auth not initialized. Skipping auth state listener.');
+            setLoading(false);
+            return;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setCurrentUser(currentUser); // Sync with store

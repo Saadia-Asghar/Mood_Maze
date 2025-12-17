@@ -16,17 +16,31 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app;
+let auth;
+let db;
+let googleProvider;
 
-// Initialize services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const googleProvider = new GoogleAuthProvider();
+const isConfigValid = firebaseConfig.apiKey && firebaseConfig.projectId;
 
-// Configure Google Provider
-googleProvider.setCustomParameters({
-    prompt: 'select_account'
-});
+if (isConfigValid) {
+    try {
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        googleProvider = new GoogleAuthProvider();
+        googleProvider.setCustomParameters({
+            prompt: 'select_account'
+        });
+    } catch (error) {
+        console.error('Firebase initialization failed:', error);
+    }
+} else {
+    console.warn('Firebase config missing. App starting in offline mode.');
+}
+
+// Export safe services (possibly undefined if config missing)
+export { app, auth, db, googleProvider };
 
 // Check if Firebase is configured
 export const isFirebaseConfigured = () => {
