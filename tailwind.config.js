@@ -8,21 +8,39 @@ export default {
     extend: {
       colors: {
         cinema: {
-          black: '#0a0a0a',
-          gold: '#d4af37',
-          goldLight: '#f4d03f',
-          goldDark: '#b8941f',
-          red: '#8a0303',
-          redLight: '#c0392b',
+          // Deep blacks with subtle variations
+          black: '#0d0d0d',
+          blackLight: '#1a1a1a',
+          blackDark: '#050505',
+
+          // Rich gold spectrum (spotlight theme)
+          gold: '#FFD700',
+          goldLight: '#FFF4B3',
+          goldDark: '#DAA520',
+          goldBright: '#FFEB3B',
+
+          // Deep burgundy reds (velvet curtain theme)
+          red: '#8B0000',
+          redLight: '#B22222',
+          redDark: '#5C0000',
+          burgundy: '#6B0F1A',
+
+          // Accent colors
+          spotlight: '#FFF9E6',
+          amber: '#FFBF00',
+          bronze: '#CD7F32',
+
+          // UI colors
           green: '#2ecc71',
           greenLight: '#58d68d',
           blue: '#3498db',
           blueLight: '#5dade2',
           purple: '#9b59b6',
           purpleLight: '#bb8fce',
-          orange: '#e67e22',
-          orangeLight: '#f39c12',
-          overlay: 'rgba(0,0,0,0.85)',
+
+          // Overlays
+          overlay: 'rgba(13,13,13,0.92)',
+          spotlightGlow: 'rgba(255,215,0,0.15)',
         },
       },
       fontFamily: {

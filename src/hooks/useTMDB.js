@@ -119,19 +119,37 @@ export async function getMovieDetails(movieId) {
 }
 
 /**
- * Fetch mixed movies (combination of popular and top rated)
+ * Fetch mixed movies based on quiz answers
+ * @param {Object} quizAnswers - User's quiz answers
  */
-export async function fetchMixedMovies() {
+export async function fetchMixedMovies(quizAnswers = {}) {
     try {
-        const [popular, topRated] = await Promise.all([
-            fetchPopularMovies(2),
-            fetchTopRatedMovies(2)
-        ]);
+        // Map quiz answers to TMDB parameters
+        const params = mapQuizToTMDBParams(quizAnswers);
 
-        // Combine and remove duplicates
-        const combined = [...popular, ...topRated];
+        // Fetch movies with filters
+        const requests = [];
+
+        // Get 3 pages of results for variety
+        for (let page = 1; page <= 3; page++) {
+            requests.push(
+                tmdbApi.get('/discover/movie', {
+                    params: {
+                        ...params,
+                        page,
+                        include_adult: false,
+                        'vote_count.gte': 50 // Ensure quality movies
+                    }
+                })
+            );
+        }
+
+        const responses = await Promise.all(requests);
+        const allMovies = responses.flatMap(response => response.data.results);
+
+        // Remove duplicates
         const unique = Array.from(
-            new Map(combined.map(movie => [movie.id, movie])).values()
+            new Map(allMovies.map(movie => [movie.id, movie])).values()
         );
 
         return unique;
@@ -139,6 +157,64 @@ export async function fetchMixedMovies() {
         console.error('Error fetching mixed movies:', error);
         throw error;
     }
+}
+
+/**
+ * Map quiz answers to TMDB API parameters
+ * @param {Object} quizAnswers - User's quiz answers
+ */
+function mapQuizToTMDBParams(quizAnswers) {
+    const params = {
+        sort_by: 'popularity.desc'
+    };
+
+    // Map vibe to genres
+    const vibeGenreMap = {
+        'mind-bending': '878,9648', // Sci-Fi, Mystery
+        'feel-good': '35,10751', // Comedy, Family
+        'adrenaline': '28,53', // Action, Thriller
+        'emotional': '18,10749' // Drama, Romance
+    };
+
+    if (quizAnswers.vibe && vibeGenreMap[quizAnswers.vibe]) {
+        params.with_genres = vibeGenreMap[quizAnswers.vibe];
+    }
+
+    // Map era to year ranges
+    const eraYearMap = {
+        'classic': { start: 1950, end: 1989 },
+        '90s-2000s': { start: 1990, end: 2009 },
+        'modern': { start: 2010, end: new Date().getFullYear() },
+        'any': null
+    };
+
+    if (quizAnswers.era && eraYearMap[quizAnswers.era]) {
+        const yearRange = eraYearMap[quizAnswers.era];
+        if (yearRange) {
+            params['primary_release_date.gte'] = `${yearRange.start}-01-01`;
+            params['primary_release_date.lte'] = `${yearRange.end}-12-31`;
+        }
+    }
+
+    // Map risk to rating
+    const riskRatingMap = {
+        'safe': 7.5,
+        'balanced': 6.5,
+        'high-risk': 5.0
+    };
+
+    if (quizAnswers.risk && riskRatingMap[quizAnswers.risk]) {
+        params['vote_average.gte'] = riskRatingMap[quizAnswers.risk];
+    }
+
+    // Map energy to sort order
+    if (quizAnswers.energy === 'low') {
+        params.sort_by = 'vote_average.desc'; // Highly rated, slower pace
+    } else if (quizAnswers.energy === 'high') {
+        params.sort_by = 'popularity.desc'; // Popular, fast-paced
+    }
+
+    return params;
 }
 
 /**

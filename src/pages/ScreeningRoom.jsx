@@ -47,9 +47,10 @@ export function ScreeningRoom() {
 
             // Check if API key is configured
             if (isApiKeyConfigured()) {
-                // Fetch real movies from TMDB
-                movies = await fetchMixedMovies();
+                // Fetch real movies from TMDB based on quiz answers
+                movies = await fetchMixedMovies(quizAnswers);
                 setDemoMode(false);
+                console.log('Fetched movies based on your preferences:', movies.length);
             } else {
                 // Use demo data
                 console.log('No API key found, using demo mode');
@@ -147,7 +148,7 @@ export function ScreeningRoom() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center px-4 pt-20">
-                <motion.div 
+                <motion.div
                     className="text-center"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -158,7 +159,7 @@ export function ScreeningRoom() {
                     >
                         <Loader2 className="w-20 h-20 text-cinema-gold mx-auto mb-6 drop-shadow-[0_0_20px_rgba(212,175,55,0.6)]" />
                     </motion.div>
-                    <motion.p 
+                    <motion.p
                         className="text-cinema-gold text-xl font-semibold"
                         animate={{ opacity: [0.5, 1, 0.5] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
@@ -243,7 +244,7 @@ export function ScreeningRoom() {
                                 )}
 
                                 {/* Progress indicator */}
-                                <motion.div 
+                                <motion.div
                                     className="max-w-md mx-auto mb-6"
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -257,23 +258,22 @@ export function ScreeningRoom() {
                                             animate={{ width: `${(currentBatch.length / 3) * 100}%` }}
                                             transition={{ duration: 0.5 }}
                                         />
-                                        
+
                                         {[0, 1, 2].map((i) => (
                                             <motion.div
                                                 key={i}
-                                                className={`relative w-5 h-5 rounded-full transition-all duration-300 ${
-                                                    i < currentBatch.length
+                                                className={`relative w-5 h-5 rounded-full transition-all duration-300 ${i < currentBatch.length
                                                         ? 'bg-gradient-to-br from-cinema-gold to-cinema-goldDark shadow-[0_0_20px_rgba(212,175,55,0.9)] border-2 border-cinema-gold'
                                                         : 'bg-cinema-gold/20 border-2 border-cinema-gold/30'
-                                                }`}
+                                                    }`}
                                                 animate={i < currentBatch.length ? {
                                                     scale: [1, 1.4, 1],
                                                     rotate: [0, 180, 360],
                                                 } : {
                                                     scale: [1, 1.1, 1],
                                                 }}
-                                                transition={{ 
-                                                    duration: 0.6, 
+                                                transition={{
+                                                    duration: 0.6,
                                                     delay: i * 0.15,
                                                     repeat: i < currentBatch.length ? Infinity : 0,
                                                     repeatDelay: 2
@@ -295,7 +295,7 @@ export function ScreeningRoom() {
                                             </motion.div>
                                         ))}
                                     </div>
-                                    <motion.p 
+                                    <motion.p
                                         className="text-center text-cinema-gold/80 text-sm font-semibold"
                                         animate={{
                                             scale: currentBatch.length > 0 ? [1, 1.05, 1] : 1,
