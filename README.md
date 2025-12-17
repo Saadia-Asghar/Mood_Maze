@@ -6,7 +6,6 @@ MoodMaze is a cinematic movie recommendation web application designed to solve "
 
 It features a unique "Rule of Three" experience: instead of an endless feed, you review a curated batch of 3 movies at a time, making the discovery process deliberate and engaging.
 
-![MoodMaze Banner](https://via.placeholder.com/1200x400/0a0a0a/d4af37?text=MoodMaze+-+The+Cinematic+Engine)
 
 ---
 
@@ -138,7 +137,7 @@ mood-maze/
 
 ## 👨‍💻 Team
 
-Built with ❤️ by [Your Team Name]
+Built with Areeba Rehman , Aleena Rizwan, Tehreem, Zainab Awais
 *   **Algorithm Specialist**: Recommendation Engine logic & Max-Heap.
 *   **UX Designer**: Interface, Themes, and Animations.
 *   **State Engineer**: Data flow, Zustand store, and Batching logic.
