@@ -245,23 +245,7 @@ export function Stage({ children, className }) {
 
 
 
-            {/* Sound toggle button - positioned to avoid overlap */}
-            <motion.button
-                onClick={toggleSound}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.5 }}
-                className="fixed top-20 right-6 z-50 p-2.5 rounded-full bg-cinema-black/90 backdrop-blur-sm border-2 border-cinema-gold/50
-                   hover:bg-cinema-gold hover:text-cinema-black hover:border-cinema-gold transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.4)]"
-                whileHover={{ scale: 1.1, boxShadow: '0 0 25px rgba(212,175,55,0.6)' }}
-                whileTap={{ scale: 0.95 }}
-            >
-                {soundEnabled ? (
-                    <Volume2 className="w-4 h-4 text-cinema-gold" />
-                ) : (
-                    <VolumeX className="w-4 h-4 text-cinema-gold" />
-                )}
-            </motion.button>
+
 
             {/* Main content */}
             <div className={cn('relative z-10', className)}>

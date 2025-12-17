@@ -13,22 +13,22 @@ export default {
           blackLight: '#1a1a1a',
           blackDark: '#050505',
 
-          // Rich gold spectrum (spotlight theme)
-          gold: '#FFD700',
-          goldLight: '#FFF4B3',
-          goldDark: '#DAA520',
-          goldBright: '#FFEB3B',
+          // Maroon Red spectrum (main theme - replaces gold)
+          gold: '#8B0000',           // Dark maroon (replaces gold)
+          goldLight: '#B22222',      // Firebrick red (replaces goldLight)
+          goldDark: '#5C0000',       // Deep maroon (replaces goldDark)
+          goldBright: '#DC143C',     // Crimson (replaces goldBright)
 
           // Deep burgundy reds (velvet curtain theme)
-          red: '#8B0000',
-          redLight: '#B22222',
-          redDark: '#5C0000',
-          burgundy: '#6B0F1A',
+          red: '#8B0000',            // Dark maroon
+          redLight: '#B22222',       // Firebrick
+          redDark: '#5C0000',        // Deep maroon
+          burgundy: '#6B0F1A',       // Burgundy
 
-          // Accent colors
-          spotlight: '#FFF9E6',
-          amber: '#FFBF00',
-          bronze: '#CD7F32',
+          // Accent colors (maroon theme)
+          spotlight: '#FFE6E6',      // Light pink tint
+          amber: '#A52A2A',          // Brown-red
+          bronze: '#8B4513',         // Saddle brown
 
           // UI colors
           green: '#2ecc71',
@@ -40,7 +40,7 @@ export default {
 
           // Overlays
           overlay: 'rgba(13,13,13,0.92)',
-          spotlightGlow: 'rgba(255,215,0,0.15)',
+          spotlightGlow: 'rgba(139,0,0,0.15)',  // Maroon glow
         },
       },
       fontFamily: {

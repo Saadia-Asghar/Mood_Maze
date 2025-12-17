@@ -7,7 +7,7 @@ import useStore from '../store/useStore';
 
 /**
  * Sound effects hook
- * Plays audio based on action type
+ * Plays audio based on action type - sounds play ONLY on click and stop after duration
  */
 export function useSound() {
     const soundEnabled = useStore(state => state.soundEnabled);
@@ -17,36 +17,53 @@ export function useSound() {
         if (!soundEnabled) return;
 
         try {
+            // Define sound durations (in milliseconds)
+            const soundConfig = {
+                click: { path: '/sounds/click.mp3', duration: 200 },      // Very short click
+                success: { path: '/sounds/success.mp3', duration: 400 },  // Medium success
+                flip: { path: '/sounds/flip.mp3', duration: 300 },        // Quick flip
+                reel: { path: '/sounds/reel.mp3', duration: 600 },        // Longer reel
+                reject: { path: '/sounds/reject.mp3', duration: 400 },    // Medium reject
+            };
+
+            const config = soundConfig[type];
+            if (!config) {
+                console.debug(`Unknown sound type: ${type}`);
+                return;
+            }
+
             // Create audio element if it doesn't exist
             if (!audioRefs.current[type]) {
-                // Sound file paths - using dynamic imports for better bundling
-                const soundPaths = {
-                    click: '/sounds/click.mp3',
-                    success: '/sounds/success.mp3',
-                    flip: '/sounds/flip.mp3',
-                    reel: '/sounds/reel.mp3',
-                    reject: '/sounds/reject.mp3',
-                };
+                audioRefs.current[type] = new Audio(config.path);
+                audioRefs.current[type].volume = 0.3;
 
-                if (soundPaths[type]) {
-                    audioRefs.current[type] = new Audio(soundPaths[type]);
-                    audioRefs.current[type].volume = 0.3;
-
-                    // Handle loading errors gracefully
-                    audioRefs.current[type].addEventListener('error', () => {
-                        console.debug(`Sound file not found: ${soundPaths[type]}`);
-                        audioRefs.current[type] = null;
-                    });
-                }
+                // Handle loading errors gracefully
+                audioRefs.current[type].addEventListener('error', () => {
+                    console.debug(`Sound file not found: ${config.path}`);
+                    audioRefs.current[type] = null;
+                });
             }
 
             // Play the sound
             if (audioRefs.current[type]) {
-                audioRefs.current[type].currentTime = 0;
-                audioRefs.current[type].play().catch(err => {
+                const audio = audioRefs.current[type];
+
+                // Reset to start
+                audio.currentTime = 0;
+
+                // Play the sound
+                audio.play().catch(err => {
                     // Silently fail if sound can't play
                     console.debug('Sound play failed:', err);
                 });
+
+                // IMPORTANT: Stop sound after specified duration
+                setTimeout(() => {
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }
+                }, config.duration);
             }
         } catch (error) {
             console.debug('Sound error:', error);

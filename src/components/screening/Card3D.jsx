@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Check, X, Info } from 'lucide-react';
 import { getGenreNames } from '../../lib/dsa';
@@ -9,9 +9,15 @@ import confetti from 'canvas-confetti';
 
 /**
  * 3D Flippable Movie Card
+ * Shows poster on front, details on back
  */
 export function Card3D({ movie, onTick, onCross }) {
     const [isFlipped, setIsFlipped] = useState(false);
+
+    // Reset flip state when movie changes
+    useEffect(() => {
+        setIsFlipped(false);
+    }, [movie.id]);
 
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
@@ -51,8 +57,8 @@ export function Card3D({ movie, onTick, onCross }) {
                     {/* FRONT - Poster */}
                     <div className="flip-card-front absolute w-full h-full rounded-lg overflow-hidden shadow-2xl glow-gold"
                         style={{ backfaceVisibility: 'hidden' }}>
-                        <motion.div 
-                            className="relative w-full h-full group cursor-pointer" 
+                        <motion.div
+                            className="relative w-full h-full group cursor-pointer"
                             onClick={handleFlip}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
@@ -68,7 +74,7 @@ export function Card3D({ movie, onTick, onCross }) {
 
                             {/* Gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-cinema-black via-transparent to-transparent" />
-                            
+
                             {/* Shine effect */}
                             <motion.div
                                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
@@ -115,7 +121,7 @@ export function Card3D({ movie, onTick, onCross }) {
                                 whileHover={{ opacity: 1, scale: 1.1 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <motion.div 
+                                <motion.div
                                     className="bg-cinema-black/95 backdrop-blur-sm border-2 border-cinema-gold rounded-full px-6 py-3 glow-gold"
                                     animate={{
                                         boxShadow: [
