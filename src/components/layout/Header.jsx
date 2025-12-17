@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../../store/useStore';
 import { signInWithGoogle, signOut, auth } from '../../lib/firebase';
 import { useSound } from '../../hooks/useSound';
+import { useAuthState } from '../../hooks/useAuthState';
 
 /**
  * Header component with navigation, search, sound toggle, and auth
