@@ -1,11 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Library as LibraryIcon, Star, Trash2, Film, Search, X, Filter } from 'lucide-react';
+import { Library as LibraryIcon, Film, Search, X, Filter } from 'lucide-react';
 import useStore from '../store/useStore';
 import { getGenreNames } from '../lib/dsa';
-import { getImageUrl } from '../lib/utils';
-import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
+import { LibraryCard } from '../components/library/LibraryCard';
+import { useSound } from '../hooks/useSound';
 
 /**
  * Library - Saved movies page with search and filter
@@ -14,6 +14,7 @@ export function Library() {
     const library = useStore(state => state.library);
     const removeFromLibrary = useStore(state => state.removeFromLibrary);
     const setCurrentPage = useStore(state => state.setCurrentPage);
+    const { playSound } = useSound();
 
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedGenre, setSelectedGenre] = useState('all');
@@ -47,6 +48,7 @@ export function Library() {
     };
 
     const clearSearch = () => {
+        playSound('click');
         setSearchQuery('');
         setSelectedGenre('all');
     };
@@ -78,7 +80,14 @@ export function Library() {
                     <p className="text-cinema-gold/70 mb-8 text-lg">
                         Start discovering movies and save your favorites here.
                     </p>
-                    <Button variant="primary" onClick={() => setCurrentPage('lobby')} size="lg">
+                    <Button
+                        variant="primary"
+                        onClick={() => {
+                            playSound('click');
+                            setCurrentPage('lobby');
+                        }}
+                        size="lg"
+                    >
                         <Film className="w-6 h-6 mr-2" />
                         Discover Movies
                     </Button>
@@ -124,10 +133,13 @@ export function Library() {
                             />
                             {searchQuery && (
                                 <button
-                                    onClick={() => setSearchQuery('')}
+                                    onClick={() => {
+                                        playSound('click');
+                                        setSearchQuery('');
+                                    }}
                                     className="absolute right-4 top-1/2 -translate-y-1/2 text-cinema-gold/50 hover:text-cinema-gold"
                                 >
-                                    <X className="w-5 h-5" />
+                                    <X className="w-5 h-6" />
                                 </button>
                             )}
                         </div>
@@ -188,101 +200,19 @@ export function Library() {
                 {/* Movie grid */}
                 <AnimatePresence mode="popLayout">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-                        {filteredMovies.map((movie, index) => {
-                            const genres = getGenreNames(movie.genre_ids);
-
-                            return (
-                                <motion.div
-                                    key={movie.id}
-                                    layout
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.8 }}
-                                    transition={{ delay: index * 0.02 }}
-                                    className="group relative"
-                                >
-                                    {/* Movie card */}
-                                    <motion.div
-                                        className="relative rounded-xl overflow-hidden border-2 border-cinema-gold/30 
-                                      hover:border-cinema-gold transition-all duration-300 
-                                      shadow-[0_0_20px_rgba(255,215,0,0.1)] hover:shadow-[0_0_30px_rgba(255,215,0,0.3)]
-                                      aspect-[2/3] cursor-pointer"
-                                        whileHover={{ scale: 1.05, y: -8 }}
-                                        whileTap={{ scale: 0.98 }}
-                                    >
-                                        {/* Poster */}
-                                        <motion.img
-                                            src={getImageUrl(movie.poster_path, 'w500')}
-                                            alt={movie.title}
-                                            className="w-full h-full object-cover"
-                                            whileHover={{ scale: 1.1 }}
-                                            transition={{ duration: 0.3 }}
-                                        />
-
-                                        {/* Overlay on hover */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-cinema-black via-cinema-black/80 to-transparent 
-                                            opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end">
-                                            {/* Title */}
-                                            <h3 className="text-cinema-gold font-serif font-bold text-sm mb-2 line-clamp-2">
-                                                {movie.title}
-                                            </h3>
-
-                                            {/* Rating */}
-                                            <div className="flex items-center gap-1 mb-2">
-                                                <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                                                <span className="text-cinema-gold text-sm font-bold">
-                                                    {movie.vote_average.toFixed(1)}
-                                                </span>
-                                            </div>
-
-                                            {/* Genres */}
-                                            <div className="flex flex-wrap gap-1 mb-3">
-                                                {genres.slice(0, 2).map((genre) => (
-                                                    <Badge key={genre} variant="default" className="text-xs py-0 px-2">
-                                                        {genre}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-
-                                            {/* Remove button */}
-                                            <motion.button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    handleRemove(movie.id);
-                                                }}
-                                                className="w-full py-2.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white rounded-lg 
-                                            transition-all duration-300 flex items-center justify-center gap-2 text-sm font-semibold shadow-lg"
-                                                whileHover={{ scale: 1.05 }}
-                                                whileTap={{ scale: 0.95 }}
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                                Remove
-                                            </motion.button>
-                                        </div>
-
-                                        {/* Score badge (if available) */}
-                                        {movie.score && (
-                                            <motion.div
-                                                className="absolute top-3 right-3 bg-gradient-to-br from-cinema-gold to-cinema-goldDark text-cinema-black 
-                                          rounded-full w-12 h-12 flex items-center justify-center font-bold text-sm shadow-lg border-2 border-cinema-gold/50"
-                                                initial={{ scale: 0, rotate: -180 }}
-                                                animate={{ scale: 1, rotate: 0 }}
-                                                transition={{ type: 'spring', stiffness: 200 }}
-                                            >
-                                                {movie.score}
-                                            </motion.div>
-                                        )}
-                                    </motion.div>
-
-                                    {/* Title below (visible on mobile) */}
-                                    <div className="mt-2 md:hidden">
-                                        <h3 className="text-cinema-gold text-sm font-semibold line-clamp-2">
-                                            {movie.title}
-                                        </h3>
-                                    </div>
-                                </motion.div>
-                            );
-                        })}
+                        {filteredMovies.map((movie, index) => (
+                            <motion.div
+                                key={movie.id}
+                                layout
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                transition={{ delay: index * 0.02 }}
+                                className="group relative"
+                            >
+                                <LibraryCard movie={movie} onRemove={handleRemove} />
+                            </motion.div>
+                        ))}
                     </div>
                 </AnimatePresence>
             </div>

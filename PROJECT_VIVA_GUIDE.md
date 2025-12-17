@@ -102,14 +102,16 @@ If user/panel asks: *"Explain your folder structure."*
     *   **Fetching**: Calls `engine.getNextMovie()` (pops from Heap).
 4.  **`Library.jsx`**:
     *   Fetches `library` from store.
-    *   Renders grid of saved movies.
-    *   Allows deleting movies.
+    *   Renders grid of **Interactive 3D Cards**.
+    *   Uses **Sound Effects** for interactions (click, remove).
+    *   Allows text search and genre filtering.
 
 ### **E. `src/components/` (The UI Bricks)**
 *   **`layout/Header.jsx`**: Navigation, Search, and Auth.
 *   **`screening/Card3D.jsx`**: The "Star" component.
     *   **Visuals**: Uses CSS 3D transforms (`rotateY`) for a premium feel.
     *   **Glassmorphism**: Frosted glass effect for modern aesthetics.
+*   **`library/LibraryCard.jsx`**: Reusable 3D flip card for the library view.
 *   **`screening/BatchReview.jsx`**: Summary screen shown after every 3 movies.
 ---
 
