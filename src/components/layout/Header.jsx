@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Film, Library, Home, Search, Volume2, VolumeX, LogIn, User, LogOut } from 'lucide-react';
+import { Film, Library, Home, Volume2, VolumeX, LogIn, User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useStore from '../../store/useStore';
 import { signInWithGoogle, signOut, auth } from '../../lib/firebase';
@@ -121,19 +121,7 @@ export function Header() {
                         {/* Divider */}
                         <div className="h-8 w-px bg-cinema-gold/30" />
 
-                        {/* Search Button */}
-                        <motion.button
-                            onClick={() => {
-                                playSound('click');
-                                setCurrentPage('library');
-                            }}
-                            className="p-2.5 rounded-lg text-cinema-gold hover:bg-cinema-gold/20 border-2 border-transparent hover:border-cinema-gold/50 transition-all"
-                            whileHover={{ scale: 1.1, rotate: 15 }}
-                            whileTap={{ scale: 0.9 }}
-                            title="Search Movies"
-                        >
-                            <Search className="w-5 h-5" />
-                        </motion.button>
+
 
                         {/* Sound Toggle */}
                         <motion.button
