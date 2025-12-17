@@ -21,7 +21,6 @@ export function Quiz() {
             question: 'Who are you watching with?',
             options: [
                 { value: 'solo', label: 'Solo', icon: '🧘', description: 'Just me, myself, and I' },
-                { value: 'date', label: 'Date Night', icon: '💑', description: 'Romantic evening' },
                 { value: 'friends', label: 'Friends', icon: '🎉', description: 'Squad hangout' },
                 { value: 'family', label: 'Family', icon: '👨‍👩‍👧‍👦', description: 'All ages welcome' },
             ],
@@ -141,75 +140,35 @@ export function Quiz() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="flex justify-between items-center mt-12 max-w-2xl mx-auto"
+                    className="flex justify-between items-center mt-12 max-w-2xl mx-auto px-4"
                 >
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    <Button
+                        variant="secondary"
+                        onClick={handleBack}
+                        className="flex items-center gap-2 group w-32 justify-center"
                     >
-                        <Button
-                            variant="secondary"
-                            onClick={handleBack}
-                            className="flex items-center gap-2 group"
-                        >
-                            <motion.div
-                                animate={{ x: [0, -3, 0] }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                            >
-                                <ArrowLeft className="w-4 h-4" />
-                            </motion.div>
-                            Back
-                            <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity ml-2">
-                                (←)
-                            </span>
-                        </Button>
-                    </motion.div>
+                        <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                        Back
+                    </Button>
 
-                    <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                    <Button
+                        variant="primary"
+                        onClick={handleNext}
+                        disabled={!canProceed}
+                        className="flex items-center gap-2 group relative w-32 justify-center"
                     >
-                        <Button
-                            variant="primary"
-                            onClick={handleNext}
-                            disabled={!canProceed}
-                            className="flex items-center gap-2 group relative"
-                        >
-                            {currentQuestion < questions.length - 1 ? (
-                                <>
-                                    Next
-                                    <motion.div
-                                        animate={{ x: [0, 3, 0] }}
-                                        transition={{ duration: 1.5, repeat: Infinity }}
-                                    >
-                                        <ArrowRight className="w-4 h-4" />
-                                    </motion.div>
-                                    <span className="text-xs opacity-0 group-hover:opacity-100 transition-opacity ml-2">
-                                        (→ or Enter)
-                                    </span>
-                                </>
-                            ) : (
-                                <>
-                                    Start Screening
-                                    <motion.div
-                                        animate={{ x: [0, 3, 0] }}
-                                        transition={{ duration: 1.5, repeat: Infinity }}
-                                    >
-                                        <ArrowRight className="w-4 h-4" />
-                                    </motion.div>
-                                </>
-                            )}
-                            {!canProceed && (
-                                <motion.span
-                                    className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-cinema-gold/60 whitespace-nowrap"
-                                    animate={{ opacity: [0.5, 1, 0.5] }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                >
-                                    Select an option first
-                                </motion.span>
-                            )}
-                        </Button>
-                    </motion.div>
+                        {currentQuestion < questions.length - 1 ? (
+                            <>
+                                Next
+                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </>
+                        ) : (
+                            <>
+                                Start
+                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                            </>
+                        )}
+                    </Button>
                 </motion.div>
 
                 {/* Keyboard hints */}

@@ -6,7 +6,7 @@ import { cn } from '../../lib/utils';
 /**
  * Camera Reel - The "Generate Again" spinning button
  */
-export function CameraReel({ onClick, className, isSpinning = false }) {
+export function CameraReel({ onClick, className, isSpinning = false, Icon = Film }) {
     return (
         <motion.button
             onClick={onClick}
@@ -41,7 +41,7 @@ export function CameraReel({ onClick, className, isSpinning = false }) {
             </div>
 
             {/* Center icon */}
-            <Film className="w-8 h-8 text-cinema-gold z-10" />
+            <Icon className="w-8 h-8 text-cinema-gold z-10" />
 
             {/* Inner circle */}
             <div className="absolute inset-3 rounded-full border-2 border-cinema-gold/30" />

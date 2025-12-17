@@ -21,6 +21,7 @@ export function ScreeningRoom() {
 
     const quizAnswers = useStore(state => state.quizAnswers);
     const rejectedIds = useStore(state => state.rejectedIds);
+    const library = useStore(state => state.library);
     const addToLibrary = useStore(state => state.addToLibrary);
     const addToRejected = useStore(state => state.addToRejected);
     const currentBatch = useStore(state => state.currentBatch);
@@ -60,7 +61,9 @@ export function ScreeningRoom() {
 
             // Create and initialize the recommendation engine
             const newEngine = new RecommendationEngine();
-            newEngine.initialize(movies, quizAnswers, rejectedIds);
+            // Combine rejected IDs and library IDs to exclude them from suggestions
+            const excludedIds = [...rejectedIds, ...library.map(m => m.id)];
+            newEngine.initialize(movies, quizAnswers, excludedIds);
 
             setEngine(newEngine);
 
@@ -80,7 +83,14 @@ export function ScreeningRoom() {
         }
     };
 
+    const currentUser = useStore(state => state.currentUser);
+
     const handleTick = (movie) => {
+        if (!currentUser) {
+            alert("✨ Please sign in to save movies to your library!");
+            return;
+        }
+
         playSound('success');
 
         // Add to library
@@ -218,6 +228,10 @@ export function ScreeningRoom() {
                             batch={currentBatch}
                             onShowMore={handleShowMore}
                             onGenerateAgain={handleGenerateAgain}
+                            onHome={() => {
+                                playSound('click');
+                                setCurrentPage('lobby');
+                            }}
                         />
                     </motion.div>
                 ) : (
@@ -263,8 +277,8 @@ export function ScreeningRoom() {
                                             <motion.div
                                                 key={i}
                                                 className={`relative w-5 h-5 rounded-full transition-all duration-300 ${i < currentBatch.length
-                                                        ? 'bg-gradient-to-br from-cinema-gold to-cinema-goldDark shadow-[0_0_20px_rgba(212,175,55,0.9)] border-2 border-cinema-gold'
-                                                        : 'bg-cinema-gold/20 border-2 border-cinema-gold/30'
+                                                    ? 'bg-gradient-to-br from-cinema-gold to-cinema-goldDark shadow-[0_0_20px_rgba(212,175,55,0.9)] border-2 border-cinema-gold'
+                                                    : 'bg-cinema-gold/20 border-2 border-cinema-gold/30'
                                                     }`}
                                                 animate={i < currentBatch.length ? {
                                                     scale: [1, 1.4, 1],

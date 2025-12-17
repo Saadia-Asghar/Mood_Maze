@@ -29,6 +29,9 @@ const useStore = create(
                     getUserLibrary(user.uid).then(library => {
                         set({ library });
                     });
+                } else {
+                    // Clear library when signing out to prevent tracking
+                    set({ library: [], rejectedIds: [] });
                 }
             },
 
@@ -40,6 +43,12 @@ const useStore = create(
             addToLibrary: async (movie) => {
                 const { currentUser } = get();
 
+                // Requirement: Library should not be tracked without sign in
+                if (!currentUser) {
+                    console.warn('Cannot add to library: User not signed in');
+                    return;
+                }
+
                 set((state) => {
                     // Check if already in library
                     if (state.library.some(m => m.id === movie.id)) {
@@ -47,10 +56,8 @@ const useStore = create(
                     }
                     const newLibrary = [...state.library, movie];
 
-                    // Sync to Firestore if user is logged in
-                    if (currentUser) {
-                        firebaseAddMovie(currentUser.uid, movie).catch(console.error);
-                    }
+                    // Sync to Firestore since user is logged in
+                    firebaseAddMovie(currentUser.uid, movie).catch(console.error);
 
                     return { library: newLibrary };
                 });
