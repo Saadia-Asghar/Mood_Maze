@@ -135,6 +135,7 @@ mood-maze/
 
 ---
 
+<<<<<<< HEAD
 ## 👨‍💻 Team
 
 Built with Areeba Rehman , Aleena Rizwan, Tehreem, Zainab Awais
@@ -146,4 +147,6 @@ Built with Areeba Rehman , Aleena Rizwan, Tehreem, Zainab Awais
 
 ---
 
+=======
+>>>>>>> 30061a06a33354e7838e7d555acff651f0883115
 **MoodMaze** - Because the best movie isn't the most popular one. It's the one that fits *you* right now. 🎬✨
