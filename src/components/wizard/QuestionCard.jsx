@@ -11,10 +11,10 @@ import { useSound } from '../../hooks/useSound';
 
 // Icon mapping for better visual consistency
 const iconMap = {
-    '🧘': User,
-    '💑': Heart,
-    '🎉': Users,
-    '👨‍👩‍👧‍👦': Baby,
+    'solo': User,
+    'date': Heart,
+    'friends': Users,
+    'family': Baby,
     '🧠': Brain,
     '😊': Smile,
     '💥': Zap,

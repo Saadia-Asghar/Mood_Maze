@@ -20,10 +20,10 @@ export function Quiz() {
             id: 'social',
             question: 'Who are you watching with?',
             options: [
-                { value: 'solo', label: 'Solo', icon: '🧘', description: 'Just me, myself, and I' },
-                { value: 'date', label: 'Date Night', icon: '💑', description: 'Romantic vibes' },
-                { value: 'friends', label: 'Friends', icon: '🎉', description: 'Squad hangout' },
-                { value: 'family', label: 'Family', icon: '👨‍👩‍👧‍👦', description: 'All ages welcome' },
+                { value: 'solo', label: 'Solo', icon: 'solo', description: 'Just me, myself, and I' },
+                { value: 'date', label: 'Date Night', icon: 'date', description: 'Romantic vibes' },
+                { value: 'friends', label: 'Friends', icon: 'friends', description: 'Squad hangout' },
+                { value: 'family', label: 'Family', icon: 'family', description: 'All ages welcome' },
             ],
         },
         {
