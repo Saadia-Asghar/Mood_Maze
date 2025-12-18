@@ -156,7 +156,12 @@ export function calculateScore(movie, answers) {
         // Boost romance and drama
         const dateGenres = [10749, 18]; // Romance, Drama
         if (movie.genre_ids?.some(id => dateGenres.includes(id))) {
-            score += 25;
+            score += 40; // Increased boost
+        }
+        // Additional keywords for date night
+        const dateKeywords = ['romantic', 'love', 'date', 'couple', 'marriage', 'passion'];
+        if (dateKeywords.some(kw => overview.includes(kw) || title.includes(kw))) {
+            score += 20;
         }
     } else if (answers.social === 'solo') {
         // Boost thought-provoking genres
@@ -369,6 +374,17 @@ export class RecommendationEngine {
      */
     generateMatchReason(movie, answers) {
         const reasons = [];
+
+        // Add social reason
+        if (answers.social) {
+            const socialLabel = {
+                'solo': 'Solo session',
+                'friends': 'Friend hangout',
+                'family': 'Family friendly',
+                'date': 'Date Night'
+            }[answers.social] || answers.social;
+            reasons.push(socialLabel);
+        }
 
         // Add vibe reason
         if (answers.vibe) {

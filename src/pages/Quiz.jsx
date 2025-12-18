@@ -23,6 +23,7 @@ export function Quiz() {
                 { value: 'solo', label: 'Solo', icon: '🧘', description: 'Just me, myself, and I' },
                 { value: 'friends', label: 'Friends', icon: '🎉', description: 'Squad hangout' },
                 { value: 'family', label: 'Family', icon: '👨‍👩‍👧‍👦', description: 'All ages welcome' },
+                { value: 'date', label: 'Date Night', icon: '💑', description: 'Romantic vibes' },
             ],
         },
         {
