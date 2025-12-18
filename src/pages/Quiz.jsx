@@ -21,9 +21,9 @@ export function Quiz() {
             question: 'Who are you watching with?',
             options: [
                 { value: 'solo', label: 'Solo', icon: '🧘', description: 'Just me, myself, and I' },
+                { value: 'date', label: 'Date Night', icon: '💑', description: 'Romantic vibes' },
                 { value: 'friends', label: 'Friends', icon: '🎉', description: 'Squad hangout' },
                 { value: 'family', label: 'Family', icon: '👨‍👩‍👧‍👦', description: 'All ages welcome' },
-                { value: 'date', label: 'Date Night', icon: '💑', description: 'Romantic vibes' },
             ],
         },
         {
