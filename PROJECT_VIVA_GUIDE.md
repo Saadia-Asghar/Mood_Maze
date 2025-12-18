@@ -23,10 +23,10 @@ We didn't just use `if/else` statements. We used **Data Structures & Algorithms 
 ### The "Waiter" Analogy (The Algorithm)
 Imagine a waiter at a restaurant.
 1.  **The Menu (The Database)**: We have thousands of movies from TMDB (The Movie Database).
-2.  **The Order (The Quiz)**: You tell the waiter: *"I'm on a date, I want something romantic, but thrilling, from the 90s."*
+2.  **The Order (The Quiz)**: You tell the waiter: *"I'm on a date night, I want something romantic, but thrilling, from the 90s."*
 3.  **The Chef's Brain (The Scoring System)**:
     *   The chef looks at *Titanic*.
-    *   Is it romantic? **YES (+30 points)**.
+    *   Is it romantic? **YES (+40 points for Date Night)**.
     *   Is it thrilling? **YES (+20 points)**.
     *   Is it from the 90s? **YES (+50 points)**.
     *   **Total Score: 100/100**.
@@ -72,7 +72,7 @@ Divide these scripts among your 5 members.
 
 ### 👤 Member 1: The "Algorithm Expert" (Focus: `dsa.js`)
 **Q: What is the unique feature of this project?**
-> "The heart of MoodMaze is our **Weighted Scoring Algorithm**. Unlike simple apps that just filter by genre, we *rank* movies. We take the user's answers (like 'Social Context' or 'Energy Level') and assign numerical weights to movie attributes. For example, if a user wants a 'Low Energy' movie, we boost Drama films by +20 points and penalize Action films by -15 points. This creates a nuanced recommendation."
+> "The heart of MoodMaze is our **Weighted Scoring Algorithm**. Unlike simple apps that just filter by genre, we *rank* movies. We take the user's answers (like 'Social Context' or 'Energy Level') and assign numerical weights to movie attributes. For example, if a user selects 'Date Night', we heavily boost Romance films by +40 points and scan titles for romantic keywords like 'love' or 'passion'. This provides a highly personalized recommendation."
 
 **Q: Where is the DSA?**
 > "We implemented a **Max-Heap**, which is a Priority Queue data structure. It ensures that no matter how many movies we score, the highest-matching movie is always accessible in **O(1)** constant time. This makes our app incredibly fast."
@@ -101,7 +101,7 @@ If the teacher opens a specific file and asks "What does this do?", use these ch
 
 ### `src/lib/dsa.js` (The Brain)
 *   **lines 10-124 (MovieHeap)**: This is the **Data Structure**. It contains methods like `push` (add movie), `pop` (remove best movie), and `bubbleUp` (sort the movie to the right spot).
-*   **lines 136-271 (calculateScore)**: This is the **Math**. It contains the `if/else` logic that adds points based on answers.
+*   **lines 130-277 (calculateScore)**: This is the **Math**. It contains the `if/else` logic that adds points based on answers, including our special **Date Night** logic.
 
 ### `src/store/useStore.js` (The Memory)
 *   This uses **Zustand**.
