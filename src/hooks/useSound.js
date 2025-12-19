@@ -1,70 +1,74 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 import useStore from '../store/useStore';
 
-// Import sound files as assets (for deployment)
-// Place your MP3 files in src/assets/sounds/
-// If files are missing, sounds will be silently skipped
+// Define sound configurations
+const SOUND_CONFIG = {
+    click: { path: '/sounds/click.mp3', duration: 250 },      // Short click
+    success: { path: '/sounds/success.mp3', duration: 500 },  // Success
+    flip: { path: '/sounds/flip.mp3', duration: 400 },        // Quick flip
+    reel: { path: '/sounds/reel.mp3', duration: 800 },        // Reel
+    reject: { path: '/sounds/reject.mp3', duration: 500 },    // Reject
+};
+
+// Global audio cache to share across hook instances
+const audioCache = {};
+
+// Preload all sounds immediately when the module is loaded
+Object.entries(SOUND_CONFIG).forEach(([type, config]) => {
+    try {
+        const audio = new Audio(config.path);
+        audio.preload = 'auto';
+        audio.volume = 0.3;
+        audioCache[type] = audio;
+
+        // Force browser to start loading
+        audio.load();
+    } catch (e) {
+        console.warn(`Failed to preload sound: ${type}`, e);
+    }
+});
 
 /**
  * Sound effects hook
- * Plays audio based on action type - sounds play ONLY on click and stop after duration
+ * Plays audio based on action type - preloaded for instant feedback
  */
 export function useSound() {
     const soundEnabled = useStore(state => state.soundEnabled);
-    const audioRefs = useRef({});
 
     const playSound = useCallback((type) => {
         if (!soundEnabled) return;
 
         try {
-            // Define sound durations (in milliseconds)
-            const soundConfig = {
-                click: { path: '/sounds/click.mp3', duration: 200 },      // Very short click
-                success: { path: '/sounds/success.mp3', duration: 400 },  // Medium success
-                flip: { path: '/sounds/flip.mp3', duration: 300 },        // Quick flip
-                reel: { path: '/sounds/reel.mp3', duration: 600 },        // Longer reel
-                reject: { path: '/sounds/reject.mp3', duration: 400 },    // Medium reject
-            };
+            const config = SOUND_CONFIG[type];
+            const audio = audioCache[type];
 
-            const config = soundConfig[type];
-            if (!config) {
-                console.debug(`Unknown sound type: ${type}`);
+            if (!config || !audio) {
                 return;
             }
 
-            // Create audio element if it doesn't exist
-            if (!audioRefs.current[type]) {
-                audioRefs.current[type] = new Audio(config.path);
-                audioRefs.current[type].volume = 0.3;
+            // If audio is already playing, clone it for overlap or just reset it
+            // For rapid clicks, we'll reset to ensure it fires every time
+            audio.pause();
+            audio.currentTime = 0;
 
-                // Handle loading errors gracefully
-                audioRefs.current[type].addEventListener('error', () => {
-                    console.debug(`Sound file not found: ${config.path}`);
-                    audioRefs.current[type] = null;
+            // Simple promise handler for Chrome's autoplay/interact policy
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    // Silently fail if browser blocks first interaction
+                    console.debug('Playback blocked until interaction:', error);
                 });
             }
 
-            // Play the sound
-            if (audioRefs.current[type]) {
-                const audio = audioRefs.current[type];
+            // Optional: Stop sound after its duration for precise timing
+            // (Most sounds are short enough that this isn't strictly needed if we reset it)
+            setTimeout(() => {
+                if (audio && audio.currentTime > config.duration / 1000) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }
+            }, config.duration);
 
-                // Reset to start
-                audio.currentTime = 0;
-
-                // Play the sound
-                audio.play().catch(err => {
-                    // Silently fail if sound can't play
-                    console.debug('Sound play failed:', err);
-                });
-
-                // IMPORTANT: Stop sound after specified duration
-                setTimeout(() => {
-                    if (audio) {
-                        audio.pause();
-                        audio.currentTime = 0;
-                    }
-                }, config.duration);
-            }
         } catch (error) {
             console.debug('Sound error:', error);
         }
