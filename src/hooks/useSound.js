@@ -35,7 +35,7 @@ Object.entries(SOUND_CONFIG).forEach(([type, config]) => {
 export function useSound() {
     const soundEnabled = useStore(state => state.soundEnabled);
 
-    const playSound = useCallback((type) => {
+    const playSound = useCallback((type, customDuration) => {
         if (!soundEnabled) return;
 
         try {
@@ -44,16 +44,28 @@ export function useSound() {
 
             if (!config || !baseAudio) return;
 
-            // Clone the node so multiple sounds can overlap for instant feedback
+            // Clone to allow overlaps
             const sound = baseAudio.cloneNode();
             sound.volume = baseAudio.volume;
+
+            const duration = customDuration || config.duration;
 
             const playPromise = sound.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    console.debug('Playback blocked until interaction:', error);
+                    console.debug('Playback blocked:', error);
                 });
             }
+
+            // Strictly stop after duration
+            setTimeout(() => {
+                try {
+                    sound.pause();
+                    sound.currentTime = 0;
+                    sound.remove(); // Clean up if possible
+                } catch (e) { }
+            }, duration);
+
         } catch (error) {
             console.debug('Sound error:', error);
         }

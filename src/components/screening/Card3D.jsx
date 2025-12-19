@@ -35,10 +35,13 @@ export function Card3D({ movie, onTick, onCross }) {
         playSound('success');
         // Trigger confetti
         confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#d4af37', '#2ecc71', '#ffffff']
+            particleCount: 80,
+            spread: 60,
+            origin: { y: 0.7 },
+            colors: ['#d4af37', '#2ecc71', '#ffffff'],
+            ticks: 150, // Shortened duration for the burst
+            gravity: 1.5, // Falls faster
+            scalar: 0.9 // Slightly smaller particles
         });
         onTick(movie);
     };

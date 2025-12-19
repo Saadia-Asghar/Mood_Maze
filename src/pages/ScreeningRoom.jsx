@@ -141,14 +141,12 @@ export function ScreeningRoom() {
     };
 
     const handleShowMore = () => {
-        playSound('click');
         clearBatch();
         setShowBatchReview(false);
         loadNextMovie();
     };
 
     const handleGenerateAgain = () => {
-        playSound('reel');
         clearBatch();
         setShowBatchReview(false);
         setCurrentPage('quiz');
@@ -228,10 +226,7 @@ export function ScreeningRoom() {
                             batch={currentBatch}
                             onShowMore={handleShowMore}
                             onGenerateAgain={handleGenerateAgain}
-                            onHome={() => {
-                                playSound('click');
-                                setCurrentPage('lobby');
-                            }}
+                            onHome={() => setCurrentPage('lobby')}
                         />
                     </motion.div>
                 ) : (
