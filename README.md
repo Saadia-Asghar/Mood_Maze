@@ -135,18 +135,4 @@ mood-maze/
 
 ---
 
-<<<<<<< HEAD
-## 👨‍💻 Team
-
-Built with Areeba Rehman , Aleena Rizwan, Tehreem, Zainab Awais
-*   **Algorithm Specialist**: Recommendation Engine logic & Max-Heap.
-*   **UX Designer**: Interface, Themes, and Animations.
-*   **State Engineer**: Data flow, Zustand store, and Batching logic.
-*   **Cloud Integrator**: Firebase Auth & Database connectivity.
-*   **InteractionDev**: Sound design & 3D interactions.
-
----
-
-=======
->>>>>>> 30061a06a33354e7838e7d555acff651f0883115
 **MoodMaze** - Because the best movie isn't the most popular one. It's the one that fits *you* right now. 🎬✨
