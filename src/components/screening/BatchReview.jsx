@@ -15,9 +15,10 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain, onHome }) {
     const { playSound } = useSound();
 
     const handleAction = (callback) => {
-        playSound('reel', 450); // Force stop after 450ms action interval
+        const stop = playSound('reel', 450);
         setIsSpinning(true);
         setTimeout(() => {
+            if (stop) stop();
             setIsSpinning(false);
             if (callback) callback();
         }, 450);

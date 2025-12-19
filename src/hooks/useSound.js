@@ -51,22 +51,33 @@ export function useSound() {
     }, []);
 
     const playSound = useCallback((type, customDuration) => {
-        if (!soundEnabled) return;
+        if (!soundEnabled) return null;
 
         try {
             const config = SOUND_CONFIG[type];
             const baseAudio = audioCache[type];
 
-            if (!config || !baseAudio) return;
+            if (!config || !baseAudio) return null;
 
-            // Clone to allow overlaps
+            // Clone to allow overlapping sounds
             const sound = baseAudio.cloneNode();
             sound.volume = baseAudio.volume;
 
-            // Add to tracking
             activeSoundsRef.current.add(sound);
 
             const duration = customDuration || config.duration;
+            let stopTimeout;
+
+            const stop = () => {
+                try {
+                    sound.pause();
+                    sound.currentTime = 0;
+                    sound.volume = 0;
+                    sound.src = '';
+                    activeSoundsRef.current.delete(sound);
+                    if (stopTimeout) clearTimeout(stopTimeout);
+                } catch (e) { }
+            };
 
             const playPromise = sound.play();
             if (playPromise !== undefined) {
@@ -77,21 +88,27 @@ export function useSound() {
             }
 
             // Strictly stop after duration
-            setTimeout(() => {
-                try {
-                    sound.pause();
-                    sound.currentTime = 0;
-                    sound.src = ''; // Release resource
-                    activeSoundsRef.current.delete(sound);
-                } catch (e) { }
-            }, duration);
+            stopTimeout = setTimeout(stop, duration);
 
+            return stop; // Return stop function for manual control
         } catch (error) {
             console.debug('Sound error:', error);
+            return null;
         }
     }, [soundEnabled]);
 
-    return { playSound };
+    const stopAllSounds = useCallback(() => {
+        activeSoundsRef.current.forEach(sound => {
+            try {
+                sound.pause();
+                sound.currentTime = 0;
+                sound.src = '';
+            } catch (e) { }
+        });
+        activeSoundsRef.current.clear();
+    }, []);
+
+    return { playSound, stopAllSounds };
 }
 
 export default useSound;
