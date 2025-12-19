@@ -33,3 +33,5 @@ dist-ssr
 
 # Reports (Do not push)
 MOODMAZE_PROJECT_REPORT.md
+*.txt
+*.ps1
