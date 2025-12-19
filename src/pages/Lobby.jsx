@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Film, Sparkles, Zap } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import useStore from '../store/useStore';
+import { useSound } from '../hooks/useSound';
 
 /**
  * Lobby - The landing page with cinema spotlight theme
@@ -11,7 +12,10 @@ export function Lobby() {
     const setCurrentPage = useStore(state => state.setCurrentPage);
     const resetQuiz = useStore(state => state.resetQuiz);
 
+    const { stopAllSounds } = useSound();
+
     const handleStart = () => {
+        stopAllSounds();
         resetQuiz();
         setTimeout(() => {
             setCurrentPage('quiz');

@@ -10,18 +10,19 @@ const SOUND_CONFIG = {
     reject: { path: '/sounds/reject.mp3', duration: 500 },    // Reject
 };
 
-// Global audio cache to share across hook instances
+// ==========================================================
+// GLOBAL AUDIO REGISTRY
+// ==========================================================
 const audioCache = {};
+const globalActiveSounds = new Set();
 
-// Preload all sounds immediately when the module is loaded
+// Preload all sounds
 Object.entries(SOUND_CONFIG).forEach(([type, config]) => {
     try {
         const audio = new Audio(config.path);
         audio.preload = 'auto';
         audio.volume = 0.3;
         audioCache[type] = audio;
-
-        // Force browser to start loading
         audio.load();
     } catch (e) {
         console.warn(`Failed to preload sound: ${type}`, e);
@@ -29,41 +30,61 @@ Object.entries(SOUND_CONFIG).forEach(([type, config]) => {
 });
 
 /**
- * Sound effects hook
- * Plays audio based on action type - preloaded for instant feedback
+ * Global stop function to absolutely kill all playing sounds
+ */
+export const stopEverything = () => {
+    globalActiveSounds.forEach(sound => {
+        try {
+            sound.pause();
+            sound.currentTime = 0;
+            sound.src = '';
+            sound.load(); // Reset buffer
+        } catch (e) { }
+    });
+    globalActiveSounds.clear();
+};
+
+/**
+ * Sound effects hook with Global Lifecycle Management
  */
 export function useSound() {
     const soundEnabled = useStore(state => state.soundEnabled);
-    const activeSoundsRef = useRef(new Set());
+
+    // Per-hook instance tracking for safety, though globalActiveSounds does the heavy lifting
+    const localActiveSounds = useRef(new Set());
 
     useEffect(() => {
-        // Cleanup function to kill all sounds on unmount
+        // Cleanup function - stops sounds started by THIS instance
         return () => {
-            activeSoundsRef.current.forEach(sound => {
-                try {
-                    sound.pause();
-                    sound.currentTime = 0;
-                    sound.src = '';
-                } catch (e) { }
+            localActiveSounds.current.forEach(sound => {
+                if (globalActiveSounds.has(sound)) {
+                    try {
+                        sound.pause();
+                        sound.src = '';
+                        globalActiveSounds.delete(sound);
+                    } catch (e) { }
+                }
             });
-            activeSoundsRef.current.clear();
+            localActiveSounds.current.clear();
         };
     }, []);
 
     const playSound = useCallback((type, customDuration) => {
-        if (!soundEnabled) return null;
+        // If sound is disabled, don't play but return a dummy stop function
+        if (!soundEnabled) return () => { };
 
         try {
             const config = SOUND_CONFIG[type];
             const baseAudio = audioCache[type];
 
-            if (!config || !baseAudio) return null;
+            if (!config || !baseAudio) return () => { };
 
-            // Clone to allow overlapping sounds
+            // Clone to allow overlaps
             const sound = baseAudio.cloneNode();
             sound.volume = baseAudio.volume;
 
-            activeSoundsRef.current.add(sound);
+            globalActiveSounds.add(sound);
+            localActiveSounds.current.add(sound);
 
             const duration = customDuration || config.duration;
             let stopTimeout;
@@ -74,7 +95,8 @@ export function useSound() {
                     sound.currentTime = 0;
                     sound.volume = 0;
                     sound.src = '';
-                    activeSoundsRef.current.delete(sound);
+                    globalActiveSounds.delete(sound);
+                    localActiveSounds.current.delete(sound);
                     if (stopTimeout) clearTimeout(stopTimeout);
                 } catch (e) { }
             };
@@ -83,32 +105,22 @@ export function useSound() {
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.debug('Playback blocked:', error);
-                    activeSoundsRef.current.delete(sound);
+                    globalActiveSounds.delete(sound);
+                    localActiveSounds.current.delete(sound);
                 });
             }
 
             // Strictly stop after duration
             stopTimeout = setTimeout(stop, duration);
 
-            return stop; // Return stop function for manual control
+            return stop;
         } catch (error) {
             console.debug('Sound error:', error);
-            return null;
+            return () => { };
         }
     }, [soundEnabled]);
 
-    const stopAllSounds = useCallback(() => {
-        activeSoundsRef.current.forEach(sound => {
-            try {
-                sound.pause();
-                sound.currentTime = 0;
-                sound.src = '';
-            } catch (e) { }
-        });
-        activeSoundsRef.current.clear();
-    }, []);
-
-    return { playSound, stopAllSounds };
+    return { playSound, stopAllSounds: stopEverything };
 }
 
 export default useSound;

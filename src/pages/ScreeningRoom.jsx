@@ -32,7 +32,7 @@ export function ScreeningRoom() {
     const demoMode = useStore(state => state.demoMode);
     const setDemoMode = useStore(state => state.setDemoMode);
 
-    const { playSound } = useSound();
+    const { playSound, stopAllSounds } = useSound();
 
     // Initialize the recommendation engine
     useEffect(() => {
@@ -141,12 +141,14 @@ export function ScreeningRoom() {
     };
 
     const handleShowMore = () => {
+        stopAllSounds();
         clearBatch();
         setShowBatchReview(false);
         loadNextMovie();
     };
 
     const handleGenerateAgain = () => {
+        stopAllSounds();
         clearBatch();
         setShowBatchReview(false);
         setCurrentPage('quiz');
@@ -226,7 +228,10 @@ export function ScreeningRoom() {
                             batch={currentBatch}
                             onShowMore={handleShowMore}
                             onGenerateAgain={handleGenerateAgain}
-                            onHome={() => setCurrentPage('lobby')}
+                            onHome={() => {
+                                stopAllSounds();
+                                setCurrentPage('lobby');
+                            }}
                         />
                     </motion.div>
                 ) : (
