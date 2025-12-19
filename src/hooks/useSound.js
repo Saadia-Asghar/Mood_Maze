@@ -35,10 +35,14 @@ Object.entries(SOUND_CONFIG).forEach(([type, config]) => {
 export const stopEverything = () => {
     globalActiveSounds.forEach(sound => {
         try {
+            // First silence it
+            sound.volume = 0;
             sound.pause();
+            // Then reset it
             sound.currentTime = 0;
+            // Then destroy it
             sound.src = '';
-            sound.load(); // Reset buffer
+            sound.load();
         } catch (e) { }
     });
     globalActiveSounds.clear();
@@ -50,27 +54,25 @@ export const stopEverything = () => {
 export function useSound() {
     const soundEnabled = useStore(state => state.soundEnabled);
 
-    // Per-hook instance tracking for safety, though globalActiveSounds does the heavy lifting
+    // Track sounds for THIS component instance
     const localActiveSounds = useRef(new Set());
 
     useEffect(() => {
         // Cleanup function - stops sounds started by THIS instance
         return () => {
             localActiveSounds.current.forEach(sound => {
-                if (globalActiveSounds.has(sound)) {
-                    try {
-                        sound.pause();
-                        sound.src = '';
-                        globalActiveSounds.delete(sound);
-                    } catch (e) { }
-                }
+                try {
+                    sound.volume = 0;
+                    sound.pause();
+                    sound.src = '';
+                    globalActiveSounds.delete(sound);
+                } catch (e) { }
             });
             localActiveSounds.current.clear();
         };
     }, []);
 
     const playSound = useCallback((type, customDuration) => {
-        // If sound is disabled, don't play but return a dummy stop function
         if (!soundEnabled) return () => { };
 
         try {
@@ -88,20 +90,31 @@ export function useSound() {
 
             const duration = customDuration || config.duration;
             let stopTimeout;
+            let playPromise;
 
             const stop = () => {
-                try {
-                    sound.pause();
-                    sound.currentTime = 0;
-                    sound.volume = 0;
-                    sound.src = '';
-                    globalActiveSounds.delete(sound);
-                    localActiveSounds.current.delete(sound);
-                    if (stopTimeout) clearTimeout(stopTimeout);
-                } catch (e) { }
+                if (stopTimeout) clearTimeout(stopTimeout);
+
+                const executeStop = () => {
+                    try {
+                        sound.pause();
+                        sound.volume = 0;
+                        sound.currentTime = 0;
+                        sound.src = '';
+                        globalActiveSounds.delete(sound);
+                        localActiveSounds.current.delete(sound);
+                    } catch (e) { }
+                };
+
+                // If play is still pending, wait for it then stop
+                if (playPromise !== undefined) {
+                    playPromise.then(executeStop).catch(executeStop);
+                } else {
+                    executeStop();
+                }
             };
 
-            const playPromise = sound.play();
+            playPromise = sound.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.debug('Playback blocked:', error);

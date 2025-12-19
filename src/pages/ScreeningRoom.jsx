@@ -39,6 +39,13 @@ export function ScreeningRoom() {
         initializeEngine();
     }, []);
 
+    // Absolute audio cleanup when transitioning between views
+    useEffect(() => {
+        if (!showBatchReview) {
+            stopAllSounds();
+        }
+    }, [showBatchReview]);
+
     const initializeEngine = async () => {
         try {
             setLoading(true);
