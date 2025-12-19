@@ -127,7 +127,7 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain, onHome }) {
                                  flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.4)]
                                  group-hover:shadow-[0_0_50px_rgba(212,175,55,0.6)] transition-all duration-300"
                         animate={isSpinning ? { rotate: 360 } : {}}
-                        transition={isSpinning ? { duration: 0.8, repeat: Infinity, ease: "linear" } : {}}
+                        transition={isSpinning ? { duration: 0.2, repeat: Infinity, ease: "linear" } : {}}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                     >

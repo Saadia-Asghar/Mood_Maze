@@ -1,0 +1,32 @@
+﻿git : From https://github.co
+m/Saadia-Asghar/Mood_Maze
+At D:\dsaaaa\mood-maze\sync_
+git.ps1:1 char:1
++ git pull --rebase origin 
+main 2>&1 | Out-File 
+-FilePath pull_log.txt  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo          
+    : NotSpecified: (From   
+  https://gi...sghar/Mood   
+ _Maze:String) [], Remot    
+eException
+    + FullyQualifiedErrorId 
+    : NativeCommandError
+ 
+ * branch            main   
+    -> FETCH_HEAD
+   26e276f..c41d001  main   
+    -> origin/main
+Rebasing (1/9)
+Rebasing (2/9)
+Rebasing (3/9)
+Rebasing (4/9)
+Rebasing (5/9)
+Rebasing (6/9)
+Rebasing (7/9)
+Rebasing (8/9)
+Rebasing (9/9)
+Successfully rebased and 
+updated refs/heads/main.

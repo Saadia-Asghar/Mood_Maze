@@ -21,8 +21,8 @@ export function CameraReel({ onClick, className, isSpinning = false, Icon = Film
             whileTap={{ scale: 0.95 }}
             animate={isSpinning ? { rotate: 720 } : { rotate: 0 }}
             transition={{
-                duration: 1.5,
-                ease: [0.68, -0.55, 0.265, 1.55]
+                duration: 0.2,
+                ease: "linear"
             }}
         >
             {/* Film sprocket holes */}
