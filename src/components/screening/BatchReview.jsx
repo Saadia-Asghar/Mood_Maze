@@ -10,16 +10,17 @@ import { useSound } from '../../hooks/useSound';
 /**
  * Batch Review - The "Intermission" view showing 3 cards
  */
-export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
+export function BatchReview({ batch, onShowMore, onGenerateAgain, onHome }) {
     const [isSpinning, setIsSpinning] = React.useState(false);
     const { playSound } = useSound();
 
-    const handleGenerateAgain = () => {
+    const handleAction = (callback) => {
+        playSound('reel');
         setIsSpinning(true);
         setTimeout(() => {
             setIsSpinning(false);
-            onGenerateAgain();
-        }, 1500);
+            if (callback) callback();
+        }, 800); // Consistent interval for reel sound + animation feel
     };
 
     return (
@@ -119,15 +120,14 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                 {/* Show 3 More - Play Wheel */}
                 <div className="flex flex-col items-center gap-3 group">
                     <motion.button
-                        onClick={() => {
-                            playSound('click');
-                            onShowMore();
-                        }}
+                        onClick={() => handleAction(onShowMore)}
                         className="relative w-20 h-20 rounded-full border-4 border-cinema-gold 
                                  bg-gradient-to-br from-cinema-red to-cinema-redLight 
                                  flex items-center justify-center shadow-[0_0_30px_rgba(212,175,55,0.4)]
                                  group-hover:shadow-[0_0_50px_rgba(212,175,55,0.6)] transition-all duration-300"
-                        whileHover={{ scale: 1.1, rotate: 90 }}
+                        animate={isSpinning ? { rotate: 360 } : {}}
+                        transition={isSpinning ? { duration: 0.8, repeat: Infinity, ease: "linear" } : {}}
+                        whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                     >
                         <div className="absolute inset-2 rounded-full border border-cinema-gold/50 border-dashed animate-[spin_10s_linear_infinite]" />
@@ -141,10 +141,7 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                 {/* Start Over - Camera Reel */}
                 <div className="flex flex-col items-center gap-3">
                     <CameraReel
-                        onClick={() => {
-                            playSound('reel');
-                            handleGenerateAgain();
-                        }}
+                        onClick={() => handleAction(onGenerateAgain)}
                         isSpinning={isSpinning}
                         size="lg"
                     />
@@ -156,15 +153,14 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
                 {/* Home - Home Wheel */}
                 <div className="flex flex-col items-center gap-3 group">
                     <motion.button
-                        onClick={() => {
-                            playSound('click');
-                            useStore.getState().setCurrentPage('lobby');
-                        }}
+                        onClick={() => handleAction(onHome)}
                         className="relative w-16 h-16 rounded-full border-2 border-cinema-gold/50 
                                  bg-cinema-black/80 flex items-center justify-center 
                                  shadow-[0_0_20px_rgba(212,175,55,0.2)]
                                  group-hover:border-cinema-gold group-hover:bg-cinema-black"
-                        whileHover={{ scale: 1.1, rotate: -10 }}
+                        animate={isSpinning ? { scale: [1, 1.1, 1] } : {}}
+                        transition={isSpinning ? { duration: 0.4, repeat: Infinity } : {}}
+                        whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                     >
                         <Home className="w-8 h-8 text-cinema-gold/70 group-hover:text-cinema-gold transition-colors" />
@@ -177,5 +173,6 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain }) {
         </div>
     );
 }
+
 
 export default BatchReview;
