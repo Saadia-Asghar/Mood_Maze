@@ -134,6 +134,8 @@ export class MovieHeap {
  * @returns {number} - Calculated score
  */
 export function calculateScore(movie, answers) {
+    const overview = movie.overview?.toLowerCase() || '';
+    const title = movie.title?.toLowerCase() || '';
     let score = movie.vote_average * 10; // Base score from rating (0-100)
 
     // Add popularity bonus (normalized)
@@ -180,9 +182,6 @@ export function calculateScore(movie, answers) {
     // ========================================
     // QUESTION 2: VIBE
     // ========================================
-    const overview = movie.overview?.toLowerCase() || '';
-    const title = movie.title?.toLowerCase() || '';
-
     if (answers.vibe === 'mind-bending') {
         const mindKeywords = ['mystery', 'twist', 'psychological', 'mind', 'reality', 'dream'];
         const hasKeyword = mindKeywords.some(kw => overview.includes(kw) || title.includes(kw));
