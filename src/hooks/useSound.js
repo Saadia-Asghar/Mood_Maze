@@ -6,7 +6,7 @@ const SOUND_CONFIG = {
     click: { path: '/sounds/click.mp3', duration: 250 },      // Short click
     success: { path: '/sounds/success.mp3', duration: 500 },  // Success
     flip: { path: '/sounds/flip.mp3', duration: 400 },        // Quick flip
-    reel: { path: '/sounds/reel.mp3', duration: 800 },        // Reel
+    reel: { path: '/sounds/reel.mp3', duration: 450 },        // Trimmed Reel
     reject: { path: '/sounds/reject.mp3', duration: 500 },    // Reject
 };
 
