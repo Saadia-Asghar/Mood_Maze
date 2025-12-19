@@ -168,16 +168,38 @@ function mapQuizToTMDBParams(quizAnswers) {
         sort_by: 'popularity.desc'
     };
 
-    // Map vibe to genres
+    if (!quizAnswers) return params;
+
+    let genreTokens = [];
+
+    // Map vibe to genres - Use OR (|) for more variety
     const vibeGenreMap = {
-        'mind-bending': '878,9648', // Sci-Fi, Mystery
-        'feel-good': '35,10751', // Comedy, Family
-        'adrenaline': '28,53', // Action, Thriller
-        'emotional': '18,10749' // Drama, Romance
+        'mind-bending': '878|9648', // Sci-Fi OR Mystery
+        'feel-good': '35|10751', // Comedy OR Family
+        'adrenaline': '28|53', // Action OR Thriller
+        'emotional': '18|10749' // Drama OR Romance
     };
 
     if (quizAnswers.vibe && vibeGenreMap[quizAnswers.vibe]) {
-        params.with_genres = vibeGenreMap[quizAnswers.vibe];
+        genreTokens.push(vibeGenreMap[quizAnswers.vibe]);
+    }
+
+    // Map social context to genres - Use OR for certain social contexts too
+    const socialGenreMap = {
+        'date': '10749|18', // Romance OR Drama
+        'family': '10751|16', // Family OR Animation
+        'friends': '35|28|12', // Comedy OR Action OR Adventure
+        'solo': '9648|18|878' // Mystery OR Drama OR Sci-Fi
+    };
+
+    if (quizAnswers.social && socialGenreMap[quizAnswers.social]) {
+        genreTokens.push(socialGenreMap[quizAnswers.social]);
+    }
+
+    // Combine vibe and social with AND (comma) so we get [Vibe Genres] AND [Social Genres]
+    // But internally each category is OR-ed
+    if (genreTokens.length > 0) {
+        params.with_genres = genreTokens.join(',');
     }
 
     // Map era to year ranges
