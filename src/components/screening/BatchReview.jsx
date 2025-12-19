@@ -20,7 +20,7 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain, onHome }) {
         setTimeout(() => {
             setIsSpinning(false);
             if (callback) callback();
-        }, 800); // Consistent interval for reel sound + animation feel
+        }, 450); // Snappier interval for better responsiveness
     };
 
     return (

@@ -40,35 +40,20 @@ export function useSound() {
 
         try {
             const config = SOUND_CONFIG[type];
-            const audio = audioCache[type];
+            const baseAudio = audioCache[type];
 
-            if (!config || !audio) {
-                return;
-            }
+            if (!config || !baseAudio) return;
 
-            // If audio is already playing, clone it for overlap or just reset it
-            // For rapid clicks, we'll reset to ensure it fires every time
-            audio.pause();
-            audio.currentTime = 0;
+            // Clone the node so multiple sounds can overlap for instant feedback
+            const sound = baseAudio.cloneNode();
+            sound.volume = baseAudio.volume;
 
-            // Simple promise handler for Chrome's autoplay/interact policy
-            const playPromise = audio.play();
+            const playPromise = sound.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    // Silently fail if browser blocks first interaction
                     console.debug('Playback blocked until interaction:', error);
                 });
             }
-
-            // Optional: Stop sound after its duration for precise timing
-            // (Most sounds are short enough that this isn't strictly needed if we reset it)
-            setTimeout(() => {
-                if (audio && audio.currentTime > config.duration / 1000) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                }
-            }, config.duration);
-
         } catch (error) {
             console.debug('Sound error:', error);
         }

@@ -130,8 +130,8 @@ export async function fetchMixedMovies(quizAnswers = {}) {
         // Fetch movies with filters
         const requests = [];
 
-        // Get 3 pages of results for variety
-        for (let page = 1; page <= 3; page++) {
+        // Get 2 pages of results for variety (optimized for speed)
+        for (let page = 1; page <= 2; page++) {
             requests.push(
                 tmdbApi.get('/discover/movie', {
                     params: {
