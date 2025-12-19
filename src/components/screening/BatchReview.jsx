@@ -15,13 +15,13 @@ export function BatchReview({ batch, onShowMore, onGenerateAgain, onHome }) {
     const { playSound } = useSound();
 
     const handleAction = (callback) => {
-        const stop = playSound('reel', 300);
+        const stop = playSound('reel', 200);
         setIsSpinning(true);
         setTimeout(() => {
             if (stop) stop();
             setIsSpinning(false);
             if (callback) callback();
-        }, 300);
+        }, 200);
     };
 
     return (
