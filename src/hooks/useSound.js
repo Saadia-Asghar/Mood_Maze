@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import useStore from '../store/useStore';
 
 // Define sound configurations
@@ -34,6 +34,21 @@ Object.entries(SOUND_CONFIG).forEach(([type, config]) => {
  */
 export function useSound() {
     const soundEnabled = useStore(state => state.soundEnabled);
+    const activeSoundsRef = useRef(new Set());
+
+    useEffect(() => {
+        // Cleanup function to kill all sounds on unmount
+        return () => {
+            activeSoundsRef.current.forEach(sound => {
+                try {
+                    sound.pause();
+                    sound.currentTime = 0;
+                    sound.src = '';
+                } catch (e) { }
+            });
+            activeSoundsRef.current.clear();
+        };
+    }, []);
 
     const playSound = useCallback((type, customDuration) => {
         if (!soundEnabled) return;
@@ -48,12 +63,16 @@ export function useSound() {
             const sound = baseAudio.cloneNode();
             sound.volume = baseAudio.volume;
 
+            // Add to tracking
+            activeSoundsRef.current.add(sound);
+
             const duration = customDuration || config.duration;
 
             const playPromise = sound.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
                     console.debug('Playback blocked:', error);
+                    activeSoundsRef.current.delete(sound);
                 });
             }
 
@@ -62,7 +81,8 @@ export function useSound() {
                 try {
                     sound.pause();
                     sound.currentTime = 0;
-                    sound.remove(); // Clean up if possible
+                    sound.src = ''; // Release resource
+                    activeSoundsRef.current.delete(sound);
                 } catch (e) { }
             }, duration);
 

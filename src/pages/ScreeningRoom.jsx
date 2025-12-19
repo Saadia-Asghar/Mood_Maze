@@ -97,13 +97,13 @@ export function ScreeningRoom() {
         addToLibrary(movie);
 
         // Add to batch with action
-        addToBatch({ movie, action: 'saved' });
+        const newBatchItem = { movie, action: 'saved' };
+        addToBatch(newBatchItem);
 
-        // Check if batch is complete
-        if (isBatchComplete()) {
+        // Check if batch is complete (account for the movie we just added)
+        if (currentBatch.length + 1 >= 3) {
             setShowBatchReview(true);
         } else {
-            // Get next movie
             loadNextMovie();
         }
     };
@@ -116,13 +116,13 @@ export function ScreeningRoom() {
         engine.rejectMovie(movie.id);
 
         // Add to batch with action
-        addToBatch({ movie, action: 'rejected' });
+        const newBatchItem = { movie, action: 'rejected' };
+        addToBatch(newBatchItem);
 
-        // Check if batch is complete
-        if (isBatchComplete()) {
+        // Check if batch is complete (account for the movie we just added)
+        if (currentBatch.length + 1 >= 3) {
             setShowBatchReview(true);
         } else {
-            // Get next movie
             loadNextMovie();
         }
     };
